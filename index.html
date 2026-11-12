@@ -1,0 +1,1416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arvind Fashions: value tree</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --side:#3A0A17; --side-2:#512732; --side-ink:#ECEEF6; --side-mute:#A3A8C6;
+  --accent:#004CAA; --accent-soft:#E6EEF8; --accent-ink:#00408F; --edge:#C9D3E3;
+  --sky:#EDF3FB; --sky-2:#A9C8EE;
+  --g1:#9E1B3C; --g2:#1F2B4D; --orange:#9E1B3C; --tot:#3A0A17;
+  --bg:#F4F6FA; --card:#FFFFFF; --ink:#141A26; --mute:#5A6273; --line:#DCE2EC; --line-2:#EBEFF5;
+  --bad:#C8372D; --bad-soft:#FBE7E4; --good:#1C8C3C; --good-soft:#E1F4E5; --flat:#9895AE; --flat-soft:#EEEFF5;
+  --amber:#B26B00; --amber-soft:#FBF0DD; --grey-card:#F2F5FA; --signal:#01C964;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --side:#071833; --side-2:#16305A; --side-ink:#ECEEF6; --side-mute:#9DA2C2;
+  --accent:#6FA6EE; --accent-soft:#16294A; --accent-ink:#9CC2F5; --sky:#14223A; --sky-2:#244070; --edge:#33405A;
+  --g1:#AC3D59; --g2:#404A67; --orange:#AC3D59; --tot:#6F9FE0;
+  --bg:#0C1220; --card:#141C2C; --ink:#E9EEF6; --mute:#9EA8BA; --line:#273246; --line-2:#1E2838;
+  --bad:#F1857A; --bad-soft:#3A1E24; --good:#4FD196; --good-soft:#15342A; --flat:#8C89A6; --flat-soft:#24213F;
+  --amber:#E6B04E; --amber-soft:#3A3020; --grey-card:#18223A; color-scheme: dark; } }
+:root[data-theme="dark"]{
+  --side:#071833; --side-2:#16305A; --side-ink:#ECEEF6; --side-mute:#9DA2C2;
+  --accent:#6FA6EE; --accent-soft:#16294A; --accent-ink:#9CC2F5; --sky:#14223A; --sky-2:#244070; --edge:#33405A;
+  --g1:#AC3D59; --g2:#404A67; --orange:#AC3D59; --tot:#6F9FE0;
+  --bg:#0C1220; --card:#141C2C; --ink:#E9EEF6; --mute:#9EA8BA; --line:#273246; --line-2:#1E2838;
+  --bad:#F1857A; --bad-soft:#3A1E24; --good:#4FD196; --good-soft:#15342A; --flat:#8C89A6; --flat-soft:#24213F;
+  --amber:#E6B04E; --amber-soft:#3A3020; --grey-card:#18223A; color-scheme: dark; }
+:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); height:100%; }
+*,*::before,*::after{ box-sizing:inherit; }
+body{ margin:0; height:100%; background:var(--bg); color:var(--ink); font-family:"IBM Plex Sans", "Segoe UI", "Helvetica Neue", Arial, sans-serif; font-variant-numeric:tabular-nums; font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+button{ font:inherit; color:inherit; cursor:pointer; }
+button:focus-visible, select:focus-visible, input:focus-visible, [tabindex]:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+.grad{ background:linear-gradient(90deg,var(--g1),var(--g2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.app{ display:grid; grid-template-columns:236px 1fr; min-height:100%; }
+/* sidebar */
+.side{ background:var(--side); color:var(--side-ink); display:flex; flex-direction:column; padding:22px 14px 18px; position:sticky; top:0; height:100vh; height:100dvh; }
+.brand{ padding:2px 8px 26px; }
+.brand .wm{ font-weight:800; font-size:19px; letter-spacing:.14em; }
+.brand .rule{ height:3px; width:58px; border-radius:2px; background:linear-gradient(90deg,var(--g1),var(--g2)); margin:7px 0 8px; }
+.brand span{ color:var(--side-mute); font-size:12.5px; display:block; }
+.nav{ display:flex; flex-direction:column; gap:2px; }
+.nav button{ display:flex; align-items:center; gap:13px; background:none; border:0; color:var(--side-mute); padding:10px 12px; border-radius:8px; text-align:left; font-size:14.5px; font-weight:500; }
+.nav button:hover{ color:var(--side-ink); }
+.nav button.on{ background:var(--side-2); color:#fff; font-weight:600; }
+.nav svg{ width:19px; height:19px; flex:none; stroke:currentColor; fill:none; stroke-width:1.7; }
+.badge{ margin-left:auto; background:var(--orange); color:#fff; border-radius:999px; font-size:11.5px; min-width:21px; height:21px; display:grid; place-items:center; font-weight:700; }
+.side-foot{ margin-top:auto; color:var(--side-mute); font-size:12px; padding:8px; line-height:1.5; }
+.side-foot b{ color:var(--side-ink); font-weight:600; display:block; margin-bottom:2px; }
+.side-foot button{ background:none; border:0; color:var(--side-ink); padding:10px 0 0; font-weight:600; font-size:12.5px; text-decoration:underline; text-underline-offset:3px; }
+/* top */
+.main{ min-width:0; display:flex; flex-direction:column; }
+.top{ background:var(--card); border-bottom:1px solid var(--line); padding:14px 28px; position:sticky; top:env(safe-area-inset-top,0px); z-index:20; display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+body::before{ content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:30; background:var(--card); }
+.co{ display:flex; flex-direction:column; margin-right:6px; }
+.co h1{ font-size:17px; margin:0; font-weight:700; letter-spacing:-.01em; white-space:nowrap; }
+.co span{ font-size:12px; color:var(--mute); }
+.filters{ display:flex; gap:7px; flex-wrap:wrap; align-items:center; }
+.sel{ position:relative; display:flex; align-items:center; border:1px solid var(--line); border-radius:8px; background:var(--card); padding:0 8px 0 11px; height:38px; gap:5px; }
+.sel label{ color:var(--mute); font-size:13px; white-space:nowrap; }
+.sel select{ appearance:none; border:0; background:transparent; font:inherit; font-size:13.5px; font-weight:600; color:var(--ink); padding:0 20px 0 2px; height:36px; cursor:pointer; max-width:150px; field-sizing:content; }
+.sel::after{ content:""; position:absolute; right:11px; top:15px; width:6px; height:6px; border-right:1.6px solid var(--mute); border-bottom:1.6px solid var(--mute); transform:rotate(45deg); pointer-events:none; }
+.sel select option{ color:#1C1838; }
+.seg{ display:inline-flex; border:1px solid var(--line); border-radius:8px; padding:3px; align-items:center; height:38px; background:var(--grey-card); }
+.seg span{ color:var(--mute); padding:0 6px 0 6px; font-size:12.5px; }
+.seg button{ border:0; background:none; padding:5px 11px; border-radius:6px; font-size:13.5px; color:var(--mute); }
+.seg button.on{ background:var(--card); color:var(--ink); font-weight:600; box-shadow:0 1px 2px rgba(28,24,56,.12); }
+.page{ padding:26px 30px 70px; max-width:1640px; }
+/* headline */
+.headline{ margin:0 0 6px; font-size:25px; line-height:1.3; font-weight:700; letter-spacing:-.015em; }
+.takeaway{ margin:0 0 18px; font-size:16px; color:var(--ink); }
+.dek{ color:var(--mute); font-size:15px; margin:0 0 22px; max-width:900px; }
+.lens-note{ margin:0 0 18px; color:var(--ink); font-size:13.5px; background:var(--sky); border-radius:8px; padding:10px 14px; max-width:1100px; }
+.lens-note button{ margin-left:8px; border:1px solid var(--accent); color:var(--accent-ink); background:transparent; border-radius:6px; padding:2px 10px; font-size:12.5px; font-weight:600; }
+/* stat band (annual report style: number, caption, vertical rule) */
+.stats{ display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 6px; margin-bottom:22px; }
+.stat{ border-left:1.5px solid var(--line); padding:2px 16px 0; text-align:left; background:none; border-top:0; border-right:0; border-bottom:0; position:relative; min-width:0; display:flex; flex-direction:column; }
+.stat:first-child{ border-left:0; }
+.stat:hover .sv{ color:var(--accent-ink); }
+.stat .sl{ color:var(--mute); font-size:13px; font-weight:500; }
+.stat .sv{ font-size:26px; font-weight:700; letter-spacing:-.02em; margin:2px 0 0; }
+.stat .sv small{ font-size:13px; color:var(--mute); font-weight:500; margin-left:3px; }
+.stat .sc{ font-size:12.5px; color:var(--mute); }
+.stat .sd{ font-size:12.5px; font-weight:600; }
+.stat.na .sv{ color:var(--flat); font-size:14px; font-weight:500; margin-top:8px; }
+.stat .sc{ margin-bottom:10px; }
+.stat .spk{ margin-top:auto; padding-top:8px; width:100%; border-top:1px dashed var(--line); } .stat .spk svg{ display:block; width:100%; height:22px; }
+.bad-t{ color:var(--bad); } .good-t{ color:var(--good); } .flat-t{ color:var(--mute); }
+/* tabs */
+.tabrow{ display:flex; align-items:flex-end; gap:20px; flex-wrap:wrap; margin-bottom:12px; justify-content:space-between; }
+.tabs{ display:flex; gap:26px; border-bottom:1px solid var(--line); }
+.tabs button{ border:0; background:none; padding:8px 0 10px; font-size:15px; color:var(--mute); border-bottom:2.5px solid transparent; margin-bottom:-1px; }
+.tabs button.on{ color:var(--ink); font-weight:700; border-color:var(--orange); }
+.legend{ display:flex; gap:14px; color:var(--mute); font-size:12.5px; flex-wrap:wrap; align-items:center; }
+.legend i{ display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:0; }
+.legend .how{ border:0; background:none; color:var(--accent-ink); font-weight:600; text-decoration:underline; text-underline-offset:3px; padding:0; font-size:12.5px; }
+/* tree panels */
+.panels{ display:grid; gap:18px; }
+.panel{ background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; position:relative; }
+.panel-h{ display:flex; align-items:baseline; gap:12px; padding:16px 22px 4px; flex-wrap:wrap; }
+.panel-h h2{ font-size:17px; margin:0; font-weight:700; }
+.panel-h .sub{ color:var(--mute); font-size:13.5px; }
+.btn{ border:1px solid var(--line); background:var(--card); border-radius:8px; padding:7px 13px; font-size:13.5px; font-weight:500; }
+.btn:hover{ border-color:var(--accent); }
+.btn.pri{ background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600; }
+.tree-wrap{ position:relative; overflow:auto; padding:14px 22px 70px; }
+.tree-inner{ position:relative; transform-origin:0 0; }
+.tree-svg{ position:absolute; inset:0; overflow:visible; pointer-events:none; }
+.col-label{ position:absolute; font-size:12.5px; color:var(--mute); font-weight:600; }
+.node{ position:absolute; width:196px; height:94px; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:9px 12px 8px 15px; cursor:pointer; text-align:left; overflow:hidden; }
+.node::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--flat); }
+.node.bad::before{ background:var(--bad); } .node.good::before{ background:var(--good); }
+.node:hover{ border-color:var(--accent); box-shadow:0 2px 10px rgba(29,35,64,.10); }
+.node.picked{ box-shadow:0 0 0 3px var(--orange); }
+.node.ref{ border-style:dashed; background:var(--grey-card); }
+.node .n{ font-size:12.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding-right:16px; }
+.node .val{ font-size:21px; font-weight:700; letter-spacing:-.015em; margin-top:1px; }
+.node .val small{ font-size:11.5px; color:var(--mute); font-weight:500; margin-left:3px; }
+.node .ft{ display:flex; justify-content:space-between; align-items:center; font-size:11.5px; color:var(--mute); margin-top:3px; gap:4px; white-space:nowrap; }
+.node .ft span:first-child{ overflow:hidden; text-overflow:ellipsis; }
+.dchip{ border-radius:4px; padding:1px 6px; font-weight:600; font-size:11.5px; white-space:nowrap; }
+.dchip.bad{ background:var(--bad-soft); color:var(--bad); } .dchip.good{ background:var(--good-soft); color:var(--good); } .dchip.flat{ background:var(--flat-soft); color:var(--mute); }
+.node.off{ background:repeating-linear-gradient(135deg,var(--grey-card) 0 7px, var(--card) 7px 14px); cursor:default; }
+.node.off::before{ background:var(--line); }
+.node.off .val{ font-size:12px; color:var(--mute); font-weight:500; margin-top:8px; line-height:1.35; }
+.node .ext{ position:absolute; right:8px; top:8px; width:16px; height:16px; color:var(--accent); }
+.op{ position:absolute; width:20px; height:20px; border-radius:50%; background:var(--card); border:1px solid var(--line); display:grid; place-items:center; font-size:12.5px; color:var(--mute); font-weight:700; line-height:1; }
+.tog{ position:absolute; height:22px; min-width:22px; padding:0 6px; border-radius:11px; background:var(--card); border:1px solid var(--line); font-size:11.5px; font-weight:700; color:var(--accent-ink); display:grid; place-items:center; }
+.tog:hover{ border-color:var(--accent); }
+.edge-note{ position:absolute; font-size:11.5px; color:var(--mute); }
+.panel-h .fs{ margin-left:auto; }
+.panel.full{ position:fixed; inset:0; z-index:45; border-radius:0; border:0; display:flex; flex-direction:column; padding-top:env(safe-area-inset-top,0px); }
+.panel.full .tree-wrap{ flex:1; overflow:auto; }
+.zoom{ position:absolute; right:16px; bottom:14px; display:flex; align-items:center; gap:2px; background:var(--card); border:1px solid var(--line); border-radius:9px; padding:3px; z-index:2; }
+.zoom button{ border:0; background:none; padding:6px 10px; border-radius:6px; font-size:13px; }
+.zoom button:hover{ background:var(--grey-card); }
+.zoom span{ color:var(--mute); font-size:12.5px; min-width:42px; text-align:center; }
+.zoom i{ width:1px; height:18px; background:var(--line); margin:0 3px; }
+/* lower */
+.lower{ display:grid; grid-template-columns:1.25fr 1fr; gap:18px; margin-top:18px; }
+.box{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px 22px; }
+.box h3{ margin:0; font-size:17px; font-weight:700; }
+.box .sub{ color:var(--mute); font-size:13.5px; margin:3px 0 14px; }
+.box-h{ display:flex; align-items:flex-start; gap:12px; justify-content:space-between; flex-wrap:wrap; }
+.bridge-row{ display:grid; grid-template-columns:minmax(170px,250px) 1fr 64px; align-items:center; gap:12px; padding:5px 0; }
+.bridge-row .lbl{ font-size:14px; display:flex; gap:6px; align-items:center; }
+.bridge-row .lbl button{ border:0; background:none; padding:0; width:18px; color:var(--accent-ink); font-weight:700; }
+.bridge-row.tot .lbl{ font-weight:700; }
+.bar-track{ position:relative; height:18px; }
+.bar{ position:absolute; top:0; height:18px; border-radius:3px; }
+.bar.tot{ background:var(--tot); } .bar.neg{ background:var(--bad); } .bar.pos{ background:var(--good); }
+.bridge-row .num{ text-align:right; font-weight:700; font-variant-numeric:tabular-nums; }
+.sub-rows{ padding:2px 0 8px 26px; border-left:2px solid var(--line-2); margin-left:8px; }
+.sub-rows div{ display:flex; justify-content:space-between; font-size:13px; color:var(--mute); padding:2px 0; }
+.check{ border-top:1px solid var(--line); margin-top:12px; padding-top:12px; color:var(--mute); font-size:13px; }
+.plain{ font-size:14.5px; margin:0 0 14px; }
+.alert-li{ display:grid; grid-template-columns:12px 1fr auto; gap:10px; padding:12px 0; border-bottom:1px solid var(--line-2); cursor:pointer; }
+.alert-li:last-child{ border-bottom:0; }
+.dot{ width:9px; height:9px; border-radius:50%; margin-top:7px; background:var(--bad); }
+.dot.amber{ background:var(--amber); } .dot.grey{ background:var(--flat); }
+.alert-li .tt{ font-weight:600; font-size:14px; }
+.tags{ display:flex; gap:8px; margin-top:5px; flex-wrap:wrap; align-items:center; font-size:12.5px; color:var(--mute); }
+.tag{ border-radius:5px; padding:1px 8px; font-size:12px; font-weight:600; background:var(--grey-card); color:var(--ink); }
+.tag.open{ background:var(--bad-soft); color:var(--bad); } .tag.ack{ background:var(--amber-soft); color:var(--amber); } .tag.closed{ background:var(--good-soft); color:var(--good); } .tag.rev{ background:var(--accent-soft); color:var(--accent-ink); }
+.imp{ text-align:right; white-space:nowrap; } .imp b{ display:block; font-size:15px; } .imp span{ color:var(--mute); font-size:12px; }
+/* drawer */
+.drawer{ position:fixed; top:0; right:0; bottom:0; width:min(500px,100%); background:var(--card); border-left:1px solid var(--line); z-index:50; transform:translateX(102%); transition:transform .22s ease; display:flex; flex-direction:column; box-shadow:-12px 0 40px rgba(28,24,56,.14); }
+.drawer.open{ transform:none; }
+.drawer-h{ padding:calc(20px + env(safe-area-inset-top,0px)) 24px 14px; border-bottom:1px solid var(--line-2); display:flex; gap:10px; align-items:flex-start; }
+.drawer-h h3{ margin:0; font-size:20px; }
+.drawer-h .x{ margin-left:auto; border:0; background:var(--grey-card); width:32px; height:32px; border-radius:8px; font-size:18px; flex:none; }
+.drawer-b{ overflow:auto; padding:18px 24px calc(30px + env(safe-area-inset-bottom,0px)); }
+.bigv{ font-size:34px; font-weight:700; letter-spacing:-.02em; }
+.h4{ font-weight:700; font-size:14px; margin:22px 0 6px; }
+.read{ background:var(--sky); color:var(--ink); border-radius:8px; padding:12px 14px; font-size:14px; }
+.read b{ color:var(--accent-ink); }
+.para{ margin:0 0 6px; font-size:14px; }
+.askq{ border-left:3px solid var(--orange); padding:4px 0 4px 12px; font-size:14px; color:var(--ink); }
+.dl{ display:grid; grid-template-columns:100px 1fr; gap:5px 12px; font-size:13px; margin:10px 0 0; color:var(--mute); }
+.dl dt{ color:var(--mute); } .dl dd{ margin:0; color:var(--ink); }
+table.t{ width:100%; border-collapse:collapse; font-size:13.5px; font-variant-numeric:tabular-nums; }
+table.t th{ text-align:right; color:var(--mute); font-weight:500; padding:7px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
+table.t th:first-child, table.t td:first-child{ text-align:left; }
+table.t td{ text-align:right; padding:8px; border-bottom:1px solid var(--line-2); }
+table.t tr.click{ cursor:pointer; } table.t tr.click:hover td{ background:var(--grey-card); }
+table.t tr.total td{ font-weight:700; border-top:1px solid var(--line); }
+.tw{ overflow-x:auto; }
+.splits{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+.splits button{ border:1px solid var(--line); background:var(--card); border-radius:6px; padding:4px 11px; font-size:12.5px; }
+.splits button.on{ background:var(--accent); color:#fff; border-color:var(--accent); }
+.scrim{ position:fixed; inset:0; background:rgba(20,16,44,.3); z-index:40; display:none; }
+.scrim.on{ display:block; }
+/* page headings */
+.ph{ margin:0 0 20px; } .ph h2{ font-size:27px; margin:0 0 6px; font-weight:700; letter-spacing:-.02em; } .ph p{ color:var(--mute); margin:0; max-width:760px; font-size:15px; }
+/* overview */
+.hero{ background:var(--card); border:1px solid var(--line); border-top:4px solid var(--orange); border-radius:14px; padding:28px 30px 26px; margin-bottom:22px; position:relative; overflow:hidden; }
+.hero .when{ font-size:13.5px; color:var(--mute); font-weight:600; margin-bottom:6px; }
+.hero h2{ font-size:30px; line-height:1.25; margin:0 0 10px; font-weight:700; letter-spacing:-.02em; }
+.hero p{ font-size:16px; margin:0; }
+.hero-stats{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; margin-top:22px; }
+.hero-stats div{ border-left:2px solid var(--orange); padding:0 26px 0 14px; margin-bottom:8px; }
+.hero-stats b{ display:block; font-size:28px; font-weight:700; letter-spacing:-.02em; }
+.hero-stats span{ font-size:13px; color:var(--ink); }
+.ov-sec{ display:grid; grid-template-columns:280px 1fr; gap:28px; padding:26px 0; border-top:1px solid var(--line); }
+.ov-sec h3{ font-size:19px; margin:0 0 6px; line-height:1.3; }
+.ov-sec .side-note{ color:var(--mute); font-size:13.5px; }
+.walk{ display:grid; grid-template-columns:200px 1fr 92px; gap:6px 14px; align-items:center; font-size:14px; }
+.walk .wl{ } .walk .wl small{ display:block; color:var(--mute); font-size:12px; }
+.walk .wb{ position:relative; height:24px; }
+.walk .wb div{ position:absolute; top:3px; height:18px; border-radius:3px; }
+.walk .wv{ text-align:right; font-weight:700; font-variant-numeric:tabular-nums; }
+.walk .tot .wl{ font-weight:700; }
+.eq{ display:flex; flex-wrap:wrap; align-items:stretch; gap:10px; margin:6px 0 14px; }
+.eq .t{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; min-width:150px; cursor:pointer; text-align:left; }
+.eq .t:hover{ border-color:var(--accent); }
+.eq .t b{ display:block; font-size:21px; } .eq .t span{ font-size:12.5px; color:var(--mute); }
+.eq .o{ align-self:center; font-size:20px; color:var(--mute); font-weight:700; }
+.levers3{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:0; }
+.levers3 > div{ padding:0 20px; border-left:1.5px solid var(--line); display:flex; flex-direction:column; }
+.levers3 > div:first-child{ border-left:0; padding-left:0; }
+.levers3 h4{ font-size:15.5px; margin:0 0 4px; }
+.levers3 .big{ font-size:26px; font-weight:700; letter-spacing:-.02em; margin:6px 0 2px; }
+.levers3 p{ font-size:13.5px; margin:0 0 8px; color:var(--ink); }
+.levers3 .m{ color:var(--mute); font-size:12.5px; margin-top:auto; min-height:3em; }
+.lv-links{ display:flex; gap:16px; margin:10px 0 0 !important; }
+.plist{ margin:0; padding-left:18px; font-size:14px; } .plist li{ margin-bottom:4px; }
+.linkb{ border:0; background:none; color:var(--accent-ink); font-weight:600; padding:0; text-decoration:underline; text-underline-offset:3px; font-size:13.5px; }
+.gloss{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 30px; }
+.gloss div{ font-size:13.5px; } .gloss b{ display:block; font-size:14px; }
+.anat{ display:grid; grid-template-columns:230px 1fr; gap:22px; align-items:center; }
+.anat .node{ position:relative; cursor:default; }
+.anat ol{ margin:0; padding-left:18px; font-size:13.5px; } .anat li{ margin-bottom:5px; }
+/* scenarios */
+.presets{ display:flex; flex-direction:column; border:1px solid var(--line); border-radius:12px; background:var(--card); margin-bottom:18px; overflow:hidden; }
+.preset{ display:grid; grid-template-columns:22px 220px 1fr auto; gap:14px; align-items:center; background:none; border:0; border-top:1px solid var(--line-2); padding:13px 18px; text-align:left; }
+.preset:first-child{ border-top:0; }
+.preset:hover{ background:var(--grey-card); }
+.preset.on{ background:var(--accent-soft); }
+.preset .rd{ width:16px; height:16px; border-radius:50%; border:1.5px solid var(--mute); }
+.preset.on .rd{ border:5px solid var(--accent); }
+.preset b{ font-size:14.5px; } .preset span{ color:var(--mute); font-size:13.5px; } .preset em{ font-style:normal; color:var(--mute); font-size:12.5px; }
+.sc-grid{ display:grid; grid-template-columns:minmax(300px,1fr) 1.3fr; gap:18px; }
+.lever{ padding:12px 0; border-bottom:1px solid var(--line-2); }
+.lever:last-child{ border-bottom:0; }
+.lever .lh{ display:flex; justify-content:space-between; gap:10px; font-weight:600; font-size:14px; }
+.lever .lh span{ color:var(--accent-ink); font-variant-numeric:tabular-nums; }
+.lever p{ margin:2px 0 6px; color:var(--mute); font-size:12.5px; }
+.lever input{ width:100%; accent-color:var(--accent); }
+.res-cards{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0; margin-bottom:16px; border:1px solid var(--line); border-radius:10px; }
+.res{ padding:14px 16px; border-left:1px solid var(--line); border-top:1px solid var(--line); }
+.res:nth-child(odd){ border-left:0; } .res:nth-child(-n+2){ border-top:0; }
+.res .t{ color:var(--mute); font-size:13px; } .res .v{ font-size:23px; font-weight:700; letter-spacing:-.01em; } .res .d{ font-size:12.5px; font-weight:600; }
+.deck-note{ font-size:13px; color:var(--mute); margin-top:12px; }
+/* reports */
+.rp-top{ display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:14px; }
+.rp-list{ background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.rp{ display:grid; grid-template-columns:54px 1.6fr 1.2fr 1fr 110px; gap:16px; align-items:center; width:100%; background:none; border:0; border-top:1px solid var(--line-2); padding:15px 20px; text-align:left; }
+.rp:first-child{ border-top:0; }
+.rp:hover{ background:var(--grey-card); }
+.rp .id{ color:var(--mute); font-weight:600; font-size:13px; }
+.rp b{ display:block; font-size:15px; } .rp span{ color:var(--mute); font-size:13px; }
+.rp-head{ display:grid; grid-template-columns:54px 1.6fr 1.2fr 1fr 110px; gap:16px; padding:10px 20px; font-size:12.5px; color:var(--mute); border-bottom:1px solid var(--line); }
+.modal{ position:fixed; inset:0; z-index:60; display:none; align-items:flex-start; justify-content:center; padding:calc(30px + env(safe-area-inset-top,0px)) 16px 30px; overflow:auto; background:rgba(20,16,44,.35); }
+.modal.on{ display:flex; }
+.sheet{ background:var(--card); border-radius:14px; width:min(980px,100%); padding:28px 32px; position:relative; }
+.sheet .x{ position:absolute; right:16px; top:16px; border:0; background:var(--grey-card); width:34px; height:34px; border-radius:8px; font-size:18px; }
+.sheet h3{ font-size:22px; margin:0 0 4px; } .sheet .sub{ color:var(--mute); margin-bottom:18px; }
+.mini-kpis{ display:flex; flex-wrap:wrap; margin-bottom:18px; }
+.mini-kpis div{ border-left:2px solid var(--orange); padding:0 22px 0 12px; margin-bottom:8px; } .mini-kpis span{ color:var(--mute); font-size:12.5px; display:block; } .mini-kpis b{ font-size:20px; }
+/* ask */
+.ask{ max-width:960px; }
+.qs{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0 24px; }
+.qs button{ text-align:left; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:9px 16px; font-size:14px; }
+.qs button:hover{ border-color:var(--accent); color:var(--accent-ink); }
+.convo{ display:flex; flex-direction:column; gap:14px; margin-bottom:20px; }
+.q-b{ align-self:flex-end; background:var(--side); color:#fff; border-radius:12px 12px 3px 12px; padding:10px 14px; max-width:70%; }
+.a-b{ background:var(--card); border:1px solid var(--line); border-radius:12px 12px 12px 3px; padding:16px 18px; max-width:90%; font-size:14.5px; }
+.a-b p{ margin:0 0 8px; } .a-b p:last-child{ margin:0; }
+.ref-chip{ display:inline; color:var(--accent-ink); font-weight:600; cursor:pointer; text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:3px; }
+.ask-bar{ display:flex; gap:10px; position:sticky; bottom:0; background:var(--bg); padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px)); }
+.ask-bar input{ flex:1; border:1.5px solid var(--line); border-radius:10px; padding:12px 14px; font:inherit; font-size:15px; background:var(--card); color:var(--ink); }
+.ask-bar input:focus{ border-color:var(--accent); outline:none; }
+/* alerts */
+.al-top{ display:grid; grid-template-columns:1fr auto; gap:16px; align-items:start; }
+.counts{ display:flex; }
+.counts div{ border-left:1.5px solid var(--line); padding:0 20px 0 14px; } .counts div:first-child{ border-left:0; } .counts b{ font-size:26px; display:block; line-height:1.1; } .counts span{ color:var(--mute); font-size:13px; }
+.al-grid{ display:grid; grid-template-columns:1.25fr 1fr; gap:18px; align-items:start; }
+.al-list{ background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.al-card{ padding:14px 18px; border-top:1px solid var(--line-2); display:grid; grid-template-columns:12px 1fr auto; gap:12px; cursor:pointer; }
+.al-card:first-child{ border-top:0; }
+.al-card.on{ background:var(--accent-soft); }
+.al-card .rule{ color:var(--mute); font-size:12.5px; } .al-card .tt{ font-weight:600; font-size:14.5px; margin:2px 0; }
+.al-detail{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px 24px; position:sticky; top:96px; }
+.al-detail h3{ font-size:21px; margin:8px 0 8px; line-height:1.3; }
+.al-detail .sec{ font-size:13.5px; font-weight:700; margin:18px 0 6px; }
+.why-li{ display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid var(--line-2); cursor:pointer; }
+.why-li b{ display:block; font-size:14px; } .why-li span{ color:var(--mute); font-size:13px; }
+.sowhat{ background:var(--sky); border-radius:8px; padding:12px 14px; font-size:14px; }
+.subtabs{ display:flex; gap:24px; border-bottom:1px solid var(--line); margin:4px 0 14px; }
+.subtabs button{ border:0; background:none; padding:9px 0; font-size:14.5px; color:var(--mute); border-bottom:2.5px solid transparent; margin-bottom:-1px; }
+.subtabs button.on{ color:var(--ink); border-color:var(--orange); font-weight:700; }
+.pill-f{ display:inline-flex; gap:2px; border:1px solid var(--line); padding:3px; border-radius:8px; margin-bottom:12px; flex-wrap:wrap; background:var(--grey-card); }
+.pill-f button{ border:0; background:none; padding:5px 12px; border-radius:6px; font-size:13px; color:var(--mute); }
+.pill-f button.on{ background:var(--card); color:var(--ink); font-weight:600; box-shadow:0 1px 2px rgba(28,24,56,.1); }
+.empty{ color:var(--mute); padding:20px; }
+.del{ border:0; background:none; color:var(--bad); font-size:12.5px; font-weight:600; padding:0 0 0 8px; text-decoration:underline; text-underline-offset:2px; }
+.savebar{ display:flex; gap:8px; margin-top:14px; } .savebar[hidden]{ display:none; }
+.savebar input, .form input, .form select, .cmt-form input, .cmt-form textarea{ font:inherit; font-size:14px; border:1px solid var(--line); border-radius:8px; padding:8px 10px; background:var(--card); color:var(--ink); width:100%; }
+.savebar input{ flex:1; }
+.form{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px 16px; margin:8px 0 16px; } .form[hidden]{ display:none; }
+.form label{ display:flex; flex-direction:column; gap:4px; font-size:13px; font-weight:600; }
+.cks{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px 14px; }
+.ck{ font-size:13.5px; display:flex; gap:6px; align-items:center; } .ck small{ color:var(--mute); }
+.comments{ border-top:1px solid var(--line); margin-top:22px; padding-top:16px; } .comments h4{ margin:0 0 10px; font-size:15px; }
+.cmt{ border-left:3px solid var(--orange); padding:4px 0 4px 12px; margin-bottom:12px; } .cmt-h{ display:flex; gap:10px; align-items:baseline; font-size:13px; } .cmt-h span{ color:var(--mute); } .cmt p{ margin:4px 0 0; font-size:14px; }
+.cmt-form{ display:grid; gap:8px; max-width:640px; } .cmt-form button{ justify-self:start; }
+.trend{ margin-top:12px; } .trend-h{ font-size:12.5px; color:var(--mute); font-weight:600; margin-bottom:2px; }
+.preset .del{ margin-left:6px; }
+@media (max-width:860px){ .form,.cks{ grid-template-columns:1fr; } }
+@media (max-width:1250px){ .stats{ grid-template-columns:repeat(3,minmax(0,1fr)); row-gap:16px; } .stat:nth-child(4){ border-left:0; } .lower,.al-grid,.sc-grid{ grid-template-columns:1fr; } .al-detail{ position:static; } .ov-sec{ grid-template-columns:1fr; gap:10px; } }
+@media (max-width:860px){
+  .hero-stats{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .app{ grid-template-columns:1fr; }
+  .side{ position:static; height:auto; flex-direction:row; align-items:center; padding:10px 12px; overflow-x:auto; gap:8px; }
+  .brand{ padding:0 8px 0 4px; } .brand span{ display:none; } .brand img{ width:120px !important; }
+  .nav{ flex-direction:row; } .nav button{ padding:8px 10px; } .nav button .lab{ display:none; }
+  .side-foot{ display:none; }
+  .top{ padding:12px 16px; position:static; } .page{ padding:18px 16px 60px; }
+  .stats{ grid-template-columns:repeat(2,minmax(0,1fr)); } .stat:nth-child(odd){ border-left:0; } .stat:nth-child(4){ border-left:1.5px solid var(--line); }
+  .levers3,.gloss{ grid-template-columns:1fr; } .levers3 > div{ border-left:0; padding:0 0 14px; }
+  .walk{ grid-template-columns:130px 1fr 70px; } .anat{ grid-template-columns:1fr; }
+  .rp,.rp-head{ grid-template-columns:40px 1fr; } .rp > :nth-child(n+3), .rp-head > :nth-child(n+3){ display:none; }
+  .preset{ grid-template-columns:22px 1fr; } .preset > :nth-child(n+3){ display:none; }
+  .hero h2{ font-size:23px; }
+}
+
+/* AFL build additions */
+.levers3{ align-items:stretch !important; } .levers3>div{ display:flex !important; flex-direction:column !important; }
+.levers3 .lv-links{ margin-top:auto !important; padding-top:10px; }
+.lv-what{ display:block; font-size:12.5px; color:var(--mute,#666); font-weight:400; margin-top:3px; line-height:1.45; }
+.lv-why{ font-size:12.5px; color:var(--ink2,#444); margin-top:4px; line-height:1.45; }
+.lv-tbl{ table-layout:fixed; width:100%; }
+.lv-tbl th:nth-child(1){width:34%} .lv-tbl th:nth-child(2){width:34%} .lv-tbl th:nth-child(3){width:14%} .lv-tbl th:nth-child(4){width:18%}
+.lv-tbl td:nth-child(1),.lv-tbl td:nth-child(3),.lv-tbl td:nth-child(4){ white-space:nowrap !important; }
+.lv-tbl tbody tr td{ border-bottom:1px solid var(--line,#ddd) !important; }
+.lv-tbl td,.lv-tbl th{ white-space:normal !important; }
+.lv-tbl td:nth-child(2),.lv-tbl th:nth-child(2){ text-align:left !important; }
+.lv-tbl td{ vertical-align:top; padding-top:10px; padding-bottom:10px; }
+.lv-tbl td:first-child{ max-width:420px; }
+.brand .bm-tile{ background:#fff; border-radius:10px; padding:10px 14px; }
+.brand .bm-tile img{ width:100%; height:auto; display:block; }
+@media (max-width:860px){ .brand .bm-tile{ padding:4px 6px; width:96px; } }
+.brand .bm{ display:flex; align-items:center; gap:12px; }
+.brand .bm img{ width:46px; height:46px; display:block; border-radius:50%; box-shadow:0 0 0 2px rgba(255,255,255,.9); }
+.brand .bm b{ display:block; font-size:16.5px; font-weight:700; letter-spacing:.01em; color:#fff; }
+.brand .bm span{ display:block; font-size:12px; color:var(--side-mute); }
+.brand .by{ margin-top:16px; display:block; color:var(--side-mute); font-size:12.5px; }
+.node{ width:216px; height:98px; padding:10px 12px 9px 15px; }
+.node .n{ font-size:13px; padding-right:4px; }
+.node.haskids .n{ padding-right:40px; }
+.node .val{ font-size:21px; }
+.node .ft{ font-size:11.5px; margin-top:4px; white-space:nowrap; gap:6px; } .node .ft span:first-child{ overflow:hidden; text-overflow:ellipsis; }
+.dchip{ font-size:11.5px; }
+.tog{ position:absolute; right:7px; top:7px; height:22px; min-width:28px; padding:0 7px; border-radius:6px; background:var(--grey-card); border:1px solid var(--line); font-size:11.5px; font-weight:700; color:var(--accent-ink); display:grid; place-items:center; cursor:pointer; line-height:1; }
+.tog:hover{ border-color:var(--accent); }
+.node.off .tog{ cursor:pointer; }
+.op{ width:22px; height:22px; font-size:13px; color:var(--ink); }
+.col-label{ font-size:13px; color:var(--ink); }
+.legend .lg-off{ background:repeating-linear-gradient(135deg,var(--line) 0 3px, var(--card) 3px 6px); border:1px solid var(--line); }
+.hero{ border:1px solid var(--line); }
+.hero h2{ max-width:1100px; }
+.hero p{ max-width:1000px; }
+.hero .byline{ margin-top:16px; font-size:12.5px; color:var(--mute); }
+.hero-stats div{ border-left:2px solid var(--accent); }
+.hero-stats b{ font-size:26px; }
+.cmpline{ color:var(--mute); margin:2px 0 4px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.hint{ color:var(--mute); font-size:12.5px; margin-top:6px; }
+.nob{ display:inline-block; width:18px; }
+.chev{ color:var(--accent); font-size:18px; }
+table.t tr.grp td{ padding-top:16px; font-weight:700; color:var(--ink); border-bottom:1px solid var(--line); text-align:left; }
+table.t.rep td:nth-child(2){ text-align:left; white-space:normal; } table.t.rep th:nth-child(2){ text-align:left; } table.t.rep td:last-child{ white-space:nowrap; color:var(--mute); }
+.lens-note.sc{ background:var(--accent-soft); }
+.eq .t.tot{ border-color:var(--accent); background:var(--accent-soft); }
+.para.lead{ font-size:15px; }
+.res .x{ color:var(--mute); font-size:12.5px; }
+.ov-sec .side-note{ margin:4px 0 0; }
+.walk{ grid-template-columns:230px 1fr 92px; }
+.al-detail{ border-top:1px solid var(--line); }
+.al-card .rule .tag{ margin-right:8px; }
+.dl{ margin:16px 0 0; grid-template-columns:84px 1fr; }
+.tags .tag{ white-space:nowrap; }
+.bridge-row .lbl{ font-size:13.5px; }
+.imp{ max-width:150px; white-space:normal; } .imp span{ display:block; line-height:1.3; }
+@media (max-width:860px){ .brand .bm img{ width:36px !important; height:36px !important; } .hero-stats div{ padding:0 8px 0 10px; min-width:0; } .hero-stats b{ font-size:19px; } .hero-stats span{ font-size:12px; } .seg{ height:auto; } .seg button{ white-space:nowrap; font-size:12.5px; padding:5px 8px; } .brand .by{ display:none; } .brand .bm b, .brand .bm span{ display:none; } .walk{ grid-template-columns:140px 1fr 70px; } }
+
+
+.lvp{ position:absolute; right:8px; top:8px; font-size:10.5px; font-weight:700; letter-spacing:.02em; padding:2px 7px; border-radius:6px; background:var(--accent-soft); color:var(--accent-ink); }
+.lvp.res{ background:var(--grey-card); color:var(--mute); font-weight:600; }
+.node .n{ padding-right:50px; }
+details.lg{ border-top:1px solid var(--line-2); padding:4px 0; }
+details.lg:first-of-type{ border-top:0; }
+details.lg summary{ cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; padding:10px 2px; font-weight:700; font-size:14px; }
+details.lg summary::-webkit-details-marker{ display:none; }
+details.lg summary::before{ content:'+'; color:var(--accent); font-weight:700; width:16px; display:inline-block; }
+details.lg[open] summary::before{ content:'\2212'; }
+details.lg summary span{ flex:1; }
+details.lg summary em{ font-style:normal; font-weight:500; font-size:12.5px; color:var(--mute); }
+.lever .lh label small{ display:block; color:var(--mute); font-weight:400; font-size:12px; margin-top:1px; }
+.lever .lh{ align-items:flex-start; }
+table.t.rank td:first-child{ text-align:left; } table.t.rank th:first-child{ text-align:left; }
+.sc-res{ position:sticky; top:84px; align-self:start; }
+
+
+.lvp{ display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.02em; padding:1px 7px; border-radius:20px; background:var(--accent-soft); color:var(--accent-ink); position:absolute; right:8px; top:8px; }
+.lvp.res{ background:var(--grey-card); color:var(--mute); }
+.node .n{ padding-right:46px; }
+details.lg{ border-top:1px solid var(--line-2); padding:6px 0; }
+details.lg summary{ cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; padding:8px 2px; font-weight:700; }
+details.lg summary::-webkit-details-marker{ display:none; }
+details.lg summary em{ font-style:normal; font-weight:500; color:var(--mute); font-size:12.5px; }
+details.lg summary::before{ content:'+'; color:var(--accent); width:16px; display:inline-block; }
+details.lg[open] summary::before{ content:'−'; }
+details.lg summary span{ flex:1; }
+.lever label small{ color:var(--mute); font-weight:400; margin-left:4px; }
+table.t.rank td:first-child{ text-align:left; } table.t.rank td{ white-space:nowrap; }
+
+@media (prefers-reduced-motion: reduce){ .drawer{ transition:none; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="bm-tile"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALMAAAAyCAYAAAAX+OqOAAATu0lEQVR4nO2dd5hVxfnHPzOn3LJ9YV06UgSlI0oRRUOMirHATzBqLNFojIotakD0p1Gxl6DGFo3GhiaWxCj2DiJFRLFRZUHKwsL2veWUmd8fFwlll713917w4Xc/z7MPz+6Zmfc9537vzDsz7xyE1lqTJctegNzTDmTJki6yYs6y15AVc5a9hqyYs+w1ZFzMbkMUslPMLLuBjIpZK8XT3QZQOWdhJs1kyQJkWMzr35+NqtjE+78+H7IrgFkyTObErDULL5iEEc5h85pVbJ6zKGOmsmSBDIq5+ptlbFr5PaYVxLIsZp16Htn9mSyZJGNiXnjBZGK2QVgJRCBIxbof2PTJgkyZy5IlM2KOrKtg2bxPyTMt6iWEFGAafHzK+WiV7Z2zZIaMiPnzc69CCYGPRGmF9n0CAZsN5Wsof3tWJkxmyZJ+MTt19Xz51mscffutDL16MioawTMArQkGbWaefRFaqXSbbTHxTZWUz8yGP3sDZrobXHThjVhC0vWC0wCYe9vNaKURUhC0LKo3lbPupXfpOOGodJtuEq8+QnTdRiKr1lG/YRPBNgXkde2IYdu8c8wEBl87GQ4bstv82V1opfBjcZyaOhrK1qJiDqAxc3MItC3ELszHyAlh2PaedjUtpFXMvuPw5T+epu8JY5G2BUD/M85iwaOPYOXkID2FFQwy86Ir+NVJXyJk5lYGneoall9/H19Pn07F5o0A5IbCWIZJpK6eelyCRhCBJtCpBIA1M95n0zufYFlB/LwAwnERMY/61WsJDOzFwEkXIE0jZV+qvl/NkmvuJJhbAKVFuGVrUbZF0bCB1H+3GGftRoLduoFlYsU9fEsSW70exzIZOPVy8jq1T9qWH3cof+ldvn3wKcq//YxoVQ0aH4CgYSMMk5gXw1Ve4pnYIYKl7ek9bhy9rzyPUOd2Kd3biufe5IcnphMuLUZZFpZpIoIBVCSC1xBBK432FYltYIEwJNqQIAV2MIRZmE/x0CG0ObAfwS6lGFt00xJEOvOZlzzwFB9OvJwzy5cSKm0DJHrFp9r2ImCZ+EJgSEFdJMKJ05+i/fj0985+3OGzS65n8eNPUuXF2HfgEA575E4K+vfGCAUBUK5LzfyveGfC76hZv5pxH71OyaiDWfPSG7wy/lRy7VxiAgytiLkOoy6+hD63XoUZDrXIJ60U9at+4F8HHUWsciPhzt0Y+9ErhDuWEq+p5a1R49i0eDHSsjC0Jq58ijp34bg5bxAsbYsQolkbSim+u24ai+59gGiklqjSFOcWMvDC8+l8/q8IddgHaZogBNr38SNRqj77ms9vmcb6jz7G0YqAaVLSoyc/e+1Zcnp0SerelOvx8ZG/ZvHH7yDtAAqN1JBrBzFz8vCVYkfvpRAorYhGIrhuHNeNoZEU5RVR2qUHg5+6m+LBfRAitc4ubWLWSjG9sBfF3Xsy5os3t7s2/+xJLH72SVRuLpYHrh+nKFzI8RvS2zvXrfiBGUN/QX1lBVZeEeMWvEf+fl2bLO/HHZ4v6cXPp/+ddscdgVaal9oNoCFSS8C0UEpTH49w3PNP02Hcka32798dB9JQV8epm5ZsHbkAGlas4ZkDhhLMCaKQOPX1/HL63+g04ZdJtes1RHh1yM/ZvHwFRsDGUYrDb7yJXpf/JqmRJLqxgvcOHMPGinVgCZyYy+jJU+g19bKk7NeXreHl/YdjBwL4GuqcBo558D72PXvCrtNylEL7ivqlK/ns3KtYuXAece0RVJLiTl0Z/cZz5B/QIykfII0TwA1vz6KqbhMj/v7nna4Nuvd/8QwD309M/EzLorxmE2tffi9d5qn6/Due6zOceEMNVm4+J6+Yt0shAxgBm34XX4i3sQoAIQVD772NmOMQwQcBQdPiowv/0OpJa9W8L1i1biVDr5+ynZABtEzEe7YCQ2tsDdJKLo5VjsNz3YdQXbYKOz8P1/MZ98a/2P+q3yYdEoX2KeHYsrl07n8Qri8I5eTx7i03s+iqO5K7OQUu4GqFI8FWmkBhMQiB2NWPYSBti/x+vRg95xUmLJxJMLcI7ACVFeW8OHAkS+54JDkfSJeYtWbOJVfTvn1XCgfuv9NlKz+X/ieMg5iDj0ZpgWlZfDzxirSsbDiV1bx82DGELIOYrxn9l3sIlRQnVbfn+WdAOLj1904TjqE4txDh+fhCYdgmkc0b2Px567bj50+cTK4VpvuFp+90TQiBqcETGoFGIRBJCvGDY04nXl2FHQziRCIM+9357HPEsJT9k6bB6FkvYgcs8BUF+fnMmXY3tcvLmq0rpEQAUiYEpRH4np+yD/l9enLGqoXkBnMwADMcYubVf+KLi6cmdw8pW2yEuiVlrF72DcMf+TM0Ed8NePhmBKC2DDxBy6a2opw1z77WOuNaM+OQ4xG+hwTy8ovoePoJSVcPtCnEatd26+/SNDh46nU4rotEoLQG02LO+N+1OFkqur6CpZ/N54AJp2yN27cl8Vx2/GPzcXJk1XrKPp5JOBDCUxpl2/S9Y1KLfAQwgjYjp0zBj8fwpUHAtPjoxN80W6+xmD4J9xvFysvhuK8+xFIClMbICzLvwQcoe+yFZuumRcxzz72c/DbFdDj28CbL2EUF9Bl/En48hhYJXYSDNjMvm7Rlttsy1jzzCptXLCEQDtHguew3ZgzSSH7FwcwJsc+o7Zflupw3nmBOLp7vITWYts3mtT9Q+93yFvm46MrbQGsG331t4wVa+Ml/8YcbwQDfkCjXpWvfAZihlk1Sf6Tb709FmAa+62LaAaqXLSWyev2uKzXqfgvVDIQ7ljL4pik4sRg2AisnwAcXXU5sQ8Uu67VazNHyChZ/8hGHXDEZ0YyIBk27AS0kKB9P+wjLoq6mkrLpr7TQumbONTcSsAJ4SiOVT5czxqXcyo6TUGlZDJ/0R7x4nC0DKMKQzDnvipTb9h2Xr1+azn59+hPaZgRIwqtdXtVKsXrWTEzbSoRqyqf9kT9L2b8dMXPD2Dk5SK1QWtMgNOuen5G6ry3XMgC9LzmHUDBMTHkEhcCXPh+cdM4u67RazPPP+yMhI0iPy3/TbNlASSHdjxkDERclAQShQIDPLrsG7aceYzk19dRtrMA0TQQCpCCnW6eU22mM/S47C8sKEUNj+wo/aLN2wQKizfQOO7LqnzOIxxsY+sS9qTnQjBj8uIPb0AAIBAINtOnbKzUbjZkVgoBlgwaNxjYM1n/8aavbTRVpWww4/zyIxUGDEQiwfv4CouUbm67TGoNefYSlr7/GoNNOxwgmN/se9vAtCGlgK5C+xjQNKusqKXvi3ynbry9bh/Y8PENgKIUHWEX5KbfTGDJgM+jyidAQwTE0UkhQirmXXpd0G1prvrjqeoo7dKPw4IFp8etH3LoIyvPxpcBA42kFwZZvOGxFCLQhUWgMKTGA2mXfN1On8XZaS/eLTscV4EmwtUBrxZKpf2myfKvEvPzG+4konz4pTDrC7UroPGAQUcdBGgY+EtO2mT3pWnSKM+DY8lVooZAafLHlZozWP8QfOWDKRdiBMEIppBaYwSBLX52BW9eQVP2aRYupKC9j5J1Tk9r4SAXlJFaGTASekJhIdJoWpwxDAoIfPw03Gk29kTTcbrhzB0KhMMpTCCnAMln5n9ebnIi3+O6V5/H+A/fT74BBKcaCMPSfD4Kn8JRCa03QtKmurmTVEy+n1I5bU4MQieemRfqzpqxwiD7nno0XcwCQ0gDX5btd9A7bMve3VxAM5NHx5DFp9owth4Q1QieWwtL5VZEC/qtG8eMfdjtCGoRDOVtGRU3YsKitrkR5XqPlW/z5r3rsRZxILQe98NeU64a7d6L7iBE4joMQAgXkBwPMvuqalHpn5TZ+U+mk381XIAJBtPJRWpMTCDD/oYfx484u68U2VbF8wVwOunRiYht5t5ChXPE0jyrJ24XC9h1xfRBa4MotI1I03mjxFolZK8Xsa66n0z6dyeuT/Hbjtgx76l5i2kUKjaE02Db19TUp9c5aabQWaC0QOjMP3MrN4YATTyLmxNFCg2HiRyOsfHD6LustmnQLvhT0mjIxI35tJRO3Lf77z5a1nAwYSY6cTp3B99BSogFDC5TjNlq2RWKu/ORzKio3cMi021scC+Z068x+Bx2ME4/jC42pIRAMJGLnJFc2lLttucw98MH3/S852kArH6E0wWCAuVNvRTXhp3JdFj77DP2OOAqrIDdjfmWMHT7TPSdlUEImJrhoTAWe1k2OPy0S8+wzL6Qgp4j2Jx/bCjdh5LMPEVUCU0i0UijTJF5bw8on/tWqdtNNoLiArj87Ej/uIgQYhk20ppq1L7zZaPmyR/9BLB5l+JP37GZPM8SeCjOA2vXrkYCvE7vHwpQYgcZXzlIWc92KVawsW8rI66YgjNZNuXL27cx+Bw4hGovhy8SuPqEAsyZfh3IbH0r2FEOevBM0OAJQPlYwwJw/XL1zbonWfHLDzXTv3odwp9Ryg1tNmkLm9E4nW8fmtasxDIlNYqlTbklOaoyU1Tjv3CsJGzbdLz6jtX4CMPRvd6GVRiqNqSWmYeHUVrH03sear7wbX10QKm1L1yEj8GJxfJnI4di8aQObP/18u3KVC76hauNahj82bbf5lnZ27Ilb0jOn4aPRvo+ONuAZifwHXyna5BU3mcCfkphjGzax5MMPGXzaWZiNJMy0hII++9G+7wA8x9myxqYJWDbzbrijyUB/K7v5oPfw5+8H7YPWSAQBw2TWby/b7ks176yLKSoope0RB+9e5zLJHuqoncoavEgMU0p8Q+L7PvscfkiTX66UxLzoihuQKPreNTktzv7IyKfvw1ceP4b20rLw4jGW3PnoLus1PRXIDDldO9BuyIHEXAelNTJos3nFMuqWrgIgtrmapd9+yaipf0r7JslONNr8T+g1DmkYNde8/C54HloIUD7K9+l9/aVNlk9azF5DlG9eeJHuQ4YR3KdNqx3dloK+PWnbsye+66CFxlMaI2Ax7/a7f3Kx86FPPQS+j9QCNEjDYvbEKQB8c/09hC2LTudN2CO+pe0E3E/hzVNaM/+W2yBg4qHBdWnbuSv5vZteCk5azN/f9ThRJ8aQh29Pi6/bIQQjHp+GG/cBiSUEpmFBpIGV9z+bfnutoKBnF7p22586P05ASbANqj6dw5o33mfpE08zeMJpTc62syRP5fxFVJevx7AsLA1Rx+Ww6Q/vcsRLSszK9Zh9912UdOtB8YH90ubwtpQMO5A2B/RBOB6e0DiADNrMuunmJmPnPTXrHvGfvxPwPCQCA4EvfN45+RwiXpz+D9yQeoON9YTNdY6NXU9Xh9qYYFJsuzWuaM/ngxPPJGCb2AgiDRF6HzGKkuEH7rJeUmJe+9Lb1NZtZsQdNyUSPjKBEIz+2zSUFwetsDVgWsSjEZbe2/iWuTA0oBFCo4XCQOyWsDG/VzdKO3SlznMR0kBIE+U47HvoKOzC1LP2lFJbd9mUThzJp7mtet9PnE4RAqEUPiB0el6uo3yF1CqRBiqAra8KaBqhQfgaAXi0PJ1Da807h5/M5qoKDMsiWt9ASb8+HP7W883WbV7MWjP32psoLC6lw9hftMzDJCk6uB8lnbvhex6+ADQELYu5N96OF4vtXKGxk927Kd4b8c/HEHEHTwjiaNCaoQ/d2rLGtEaIRE6yEAIfjTCaz+eQUqB1InNOkUjMSQdC6S1fLY2vNTS3nyAFWgg8kUh1CCVOAqds162p581hv2TN/NkEbBNdXUf7g4dw/IJ3mz34AUmIueyR59mwYik9R47KfMKMEAy68waU4yRCCCEQponruCw468qdiqua+m3yCAQ+igylaOxE4UH9Kdy3C9pxMF2Pop49yOvVrUVtacTW90sIITGEwHN3ncgkTBOVUH8iZ0EIfJX6AYcmHNqSmCEwhEz0D7uIVb2GKIbSWEIigXoJsWU/JNaJfR/t7fyjvMQ15Xo0rC3nqz/ezjMd+rPqiwUorfC0ybD772bM7BlJH4Nr/L0ZWuPWNbDwyptY+OhjmEhkXi5jP/wPBf33R1ppSALf0aTS+JEo7x57FmtnfgC2vXXpTSCIOzEGHD+W4c/chwwFqP12Oa+PPp76qmoMwwAhiXtxeh12KIc89wjh9u0yvg274e3ZvHb8ONCS4155gdIxh6bWgNY0lP3Au2PPZMOir5CWhUTgui4FXTpz/MxXyemy88kZp7qGT391Ad+98xamaSE0uL5HuLSU/5k5g9weXVt078rzWPvqW7x1yjkIH7QUCKVBSo568lE6jj8GaW3focU3VvDW6PGUf/M1pmUlQgydOMygtIBm82w0jnZw0ZSECshv146+l06ky+9PSXki3aiY3do6Ft3zEKYPwaJitB1CRqI49Q3k9etNl/FHpz123jhnEWX/+DdUVREoKkD7VuLz0OBoF0NpIstWEty3A8WHDCLYphhhmphGYGu4IQRE1m9EB2w6nvBzzAyvKmiteaakF7iK0yuXpby970ViLHv8BWzLIFRagud5mKaJFgJVW09MufQ4dex227daa9a/9wlU1mIVF5DYTU8ITtfXE49G6Tj26BZtatUsX0352x+R07YYbZkIzZZeURNbW0Gbo0dS0OO/7yLRSrPm9fdwK2sJFeSjDJkor0F5LsLzE3F3Y6HflndnIAVWQZhgl46EOrRr1WZcWl/P9f+R5X99nsj3qxhwW8uP+GdJD1kxpwOt92hmWZYE2f/UMh1khfyTICvmLHsNWTFn2WvIijnLXkNWzFn2Gv4P8f0IwmFIX2wAAAAASUVORK5CYII=" alt="Arvind Fashions logo"></div><span class="by">Value tree, built by Aistra</span></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot"><b>Demo data</b>Company totals are Arvind Fashions’ reported results (latest: H1 FY27, to September 2026). Splits by brand, channel and month, pieces and prices are Aistra estimates until AFL’s data is connected.<br><button id="resetBtn">Reset the demo</button></div>
+  </aside>
+  <div class="main">
+    <header class="top">
+      
+      <div class="filters" id="filters"></div>
+    </header>
+    <main class="page" id="page"></main>
+  </div>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Node details"><div class="drawer-h"><div id="dTitle"></div><button class="x" id="dClose" aria-label="Close">×</button></div><div class="drawer-b" id="dBody"></div></aside>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+<script>
+// ===== Arvind Fashions value tree engine (pure JS, no DOM) =====
+// Anchors: Arvind Fashions Ltd consolidated (Ind AS) results. H1 FY26 and H1 FY27 from the Q2 FY27 fact sheet;
+// H2 FY26 = FY26 (annual report 2026) less H1 FY26; H2 FY25 is an estimate. Other expenses split by type uses the FY26 note 23 shares.
+const MONTHS = [];
+(function(){ const names=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let y=2024,m=10; for(let i=0;i<24;i++){ MONTHS.push({key:`${y}-${String(m).padStart(2,'0')}`,label:`${names[m-1]} ${y}`,short:names[m-1],i}); m++; if(m>12){m=1;y++;} } })();
+const LAST_ACTUAL = 23; const FY_START = 6;
+const PERIODS = [
+  {k:'H1FY27',s:18,e:23,l:'H1 FY27',long:'H1 FY27 (April to September 2026), the latest reported half',kind:'half'},
+  {k:'FY26',s:6,e:17,l:'FY26',long:'FY26 (April 2025 to March 2026)',kind:'fy'},
+  {k:'H2FY26',s:12,e:17,l:'H2 FY26',long:'H2 FY26 (October 2025 to March 2026)',kind:'half'},
+  {k:'H1FY26',s:6,e:11,l:'H1 FY26',long:'H1 FY26 (April to September 2025)',kind:'half'},
+];
+for(let t=23;t>=18;t--) PERIODS.push({k:'m'+t,s:t,e:t,l:MONTHS[t].label,long:MONTHS[t].label+' (monthly split illustrative)',kind:'month'});
+const PER_BY = Object.fromEntries(PERIODS.map(p=>[p.k,p]));
+
+const DIVS = [{k:'pw',l:'Power brands'},{k:'pr',l:'Premium brands'}];
+const REGIONS = [{k:'rt',l:'Retail stores'},{k:'ob',l:'Online B2C'},{k:'wh',l:'Wholesale (MBOs and department stores)'},{k:'b2b',l:'Online B2B and others'}];
+// brand share, average list price per piece (₹), landed cost share: illustrative. USPA crossed ₹2,500 Cr NSV in FY26 (annual report).
+const STREAMS = [
+ {k:'uspa',l:'U.S. Polo Assn.',d:'pw',sh:.47,price:1700,cogs:.455},
+ {k:'arrow',l:'Arrow',d:'pw',sh:.14,price:2300,cogs:.45},
+ {k:'fm',l:'Flying Machine',d:'pw',sh:.11,price:1500,cogs:.47},
+ {k:'th',l:'Tommy Hilfiger',d:'pr',sh:.16,price:5200,cogs:.44},
+ {k:'ck',l:'Calvin Klein',d:'pr',sh:.12,price:4800,cogs:.44},
+];
+const STREAM_BY = Object.fromEntries(STREAMS.map(s=>[s.k,s]));
+const REG_BY = Object.fromEntries(REGIONS.map(r=>[r.k,r]));
+const DIV_BY = Object.fromEntries(DIVS.map(d=>[d.k,d]));
+const REAL={rt:.80,ob:.68,wh:.62,b2b:.58};   // share of list price realised after discounts and trade margins (illustrative)
+const COMM={rt:.10,ob:.24,wh:.15,b2b:.10};   // channel commission rate before calibration (illustrative)
+// reported halves, ₹ Cr: revenue, COGS, employee, other expenses, D&A, net finance cost less other income, tax, NCI
+const HALF={ h2fy25:{rev:2400,cogs:1110,emp:139,oth:836,da:130,finN:70,tax:38,nci:30,est:1},
+  h1fy26:{rev:2524.8,cogs:1162.3,emp:157.8,oth:884.1,da:139.8,finN:82.2-27.6,tax:44.5,nci:31.2},
+  h2fy26:{rev:2741.39,cogs:1240.21,emp:163.95,oth:953.27,da:149.88,finN:88.25-13.19,tax:32.54,nci:29.89},
+  h1fy27:{rev:2837.3,cogs:1272.6,emp:173.8,oth:1015.0,da:161.6,finN:96.9-14.0,tax:35.8,nci:36.8} };
+const HK=t=> t<6?'h2fy25': t<12?'h1fy26': t<18?'h2fy26':'h1fy27';
+// FY26 other expenses (note 23): commission 687.43, royalty 221.93, ad spend 212.69, outsourced 273.58, warehouse 46.98, freight 83.55; rest 311.21 of 1,837.37
+const OX={comm:687.43/1837.37, corp:(221.93+212.69)/1837.37, svc:(273.58+46.98+83.55)/1837.37, site:311.21/1837.37};
+const MIX={h2fy25:{rt:.37,ob:.11,wh:.31,b2b:.21},h1fy26:{rt:.38,ob:.12,wh:.31,b2b:.19},h2fy26:{rt:.39,ob:.125,wh:.32,b2b:.165},h1fy27:{rt:.40,ob:.13,wh:.33,b2b:.14}};
+const SEAS=[1.05,1.12,1.0,1.08,.98,.95,.88,.9,.95,.98,1.0,1.05]; // Oct..Sep (illustrative)
+
+function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return ((h>>>0)%10000)/10000;}
+function noise(s,amp){return (hash(s)-.5)*2*amp;}
+function interp(pts,t){ for(let i=0;i<pts.length-1;i++){ const [a,va]=pts[i],[b,vb]=pts[i+1]; if(t>=a&&t<=b) return va+(vb-va)*(t-a)/(b-a); } return pts[pts.length-1][1]; }
+const ROWS=[]; for(const s of STREAMS) for(const r of REGIONS) ROWS.push({id:s.k+'|'+r.k,st:s.k,div:s.d,reg:r.k});
+const D={row:{actual:[],budget:[]},co:{actual:[],budget:[]}};
+const ASSETS=[[-1,900],[17,1050],[23,1180]];        // fixed + right-of-use assets, ₹ Cr (Mar'26 ₹931 Cr; Sep'26 ₹1,104 Cr, balance sheet); path estimated
+const STORES=[[-1,980],[17,1025],[23,1044]];        // EBOs: 1,025 (Mar 2026), 1,044 (Sep 2026); Oct 2024 estimated
+const NETDEBT=[[-1,520],[11,560],[17,467],[23,583]]; // borrowings less cash: Mar'26 ₹467 Cr, Sep'26 ₹583 Cr (balance sheet); earlier points estimated
+const DSO=[[-1,58],[11,56],[17,54],[23,49]], DPO=t=>interp([[-1,91],[11,91],[17,93],[23,92]],t); // results presentation
+const LEASE_PCT=.046;
+const NWCP=[[-1,900],[11,961],[17,969],[23,1088]];   // net working capital: Sep'25 ₹961 Cr, Mar'26 ₹969 Cr, Sep'26 ₹1,088 Cr (results presentation); Oct'24 estimated
+const REP={};                                // lease rent paid ≈ gap between Ind AS and pre-Ind AS EBITDA, Q2 FY27 (₹72 Cr on ₹1,559 Cr)
+(function build(){
+  for(const ver of ['actual','budget']) for(let t=0;t<24;t++){
+    const hk=HK(t); const h=HALF[hk]; const mi=t%6; const half0=t-mi; let sw=0; for(let i=0;i<6;i++) sw+=SEAS[(half0+i)%12]; const w=SEAS[t%12]/sw;
+    const g= ver==='budget'&&t>=18? 1.13*HALF.h1fy26.rev/h.rev : 1;   // plan: 13% growth on H1 FY26 (mid-point of AFL's 12-15% aspiration)
+    const revT=h.rev*w*g, mix=MIX[hk]; const rows={};
+    for(const s of STREAMS) for(const r of REGIONS){ const id=s.k+'|'+r.k;
+      let rev=revT*s.sh*mix[r.k]*(1+noise(id+t,.04));
+      const real=REAL[r.k]+noise(id+t+'rl',.012)+(t>=18?.006:0);
+      const px=s.price*Math.pow(1.05,(t-12)/12)*(1+noise(id+t+'px',.01));
+      rows[id]={rev,real,price:px,samples:rev/(px*real)/1e7*1e7/1e7,cogsSh:s.cogs};
+      rows[id].samples=rev/(px*real); rows[id].util=.78+noise(id+t+'u',.04); rows[id].cap=rows[id].samples/rows[id].util; }
+    let cur=0; for(const id in rows) cur+=rows[id].rev; const k=revT/cur; for(const id in rows){ rows[id].rev*=k; rows[id].samples*=k; rows[id].cap*=k; }
+    const tot=revT, sc=ver==='budget'&&t>=18? .985:1;  // plan: 1.5% cost efficiency
+    const cogsT=h.cogs*w*g*sc, empT=h.emp*w*g, othT=h.oth*w*g*sc;
+    const parts={comm:othT*OX.comm, svc:othT*OX.svc, site:othT*OX.site};
+    let wc=0,wcm=0,ws=0; for(const id in rows){ const v=rows[id]; wc+=v.rev*v.cogsSh; wcm+=v.rev*COMM[id.split('|')[1]]; ws+=v.rev; }
+    for(const id in rows){ const v=rows[id]; const ch=id.split('|')[1];
+      v.cons=cogsT*v.rev*v.cogsSh/wc; v.comm=parts.comm*v.rev*COMM[ch]/wcm; v.lab=parts.svc*v.rev/ws*(ch==='rt'?1.25:ch==='ob'?1.1:.8);
+      v.sup=empT*v.rev/ws; v.site=parts.site*v.rev/ws*(ch==='rt'?1.6:.6); v.won=.05+noise(id+'wn',.02); }
+    // normalise lab and site after channel weights
+    for(const key of ['lab','site']){ let x=0; for(const id in rows) x+=rows[id][key]; const tgt= key==='lab'?parts.svc:parts.site; for(const id in rows) rows[id][key]*=tgt/x; }
+    for(const id in rows){ const v=rows[id]; v.ebitda=v.rev-v.cons-v.comm-v.lab-v.sup-v.site; v.da=h.da*w*v.rev/ws;
+      v.cphL=3.0/100/12; v.cphS=4.6/100/12; v.labHc=v.lab/v.cphL; v.supHc=v.sup/v.cphS; }
+    D.row[ver][t]=rows;
+    const c={corp:othT*OX.corp, corpDa:0, nci:h.nci*w, taxRate:h.tax/((h.rev-h.cogs-h.emp-h.oth)-h.da-h.finN), leases:tot*LEASE_PCT, addback:0, capHub:0, equity:1000, shares:13.3,
+      div:0, acq:0, eq:0, oneoff:0, treas:0};
+    c.fin=h.finN*w; c.capBase=(t<12?95:120)/6*(1+noise('cb'+t,.15)); c.dso=interp(DSO,t); c.netDebt=interp(NETDEBT,t);
+    D.co[ver][t]=c; }
+  for(const ver of ['actual','budget']) for(let t=0;t<24;t++){ let siteT=0,daT=0; for(const id in D.row[ver][t]){ siteT+=D.row[ver][t][id].site; daT+=D.row[ver][t][id].da; }
+    const A=interp(ASSETS,t), N=interp(STORES,t);
+    for(const id in D.row[ver][t]){ const v=D.row[ver][t][id]; v.sites=N*v.site/siteT; v.assets=A*v.da/daT; } }
+  for(const ver of ['actual','budget']) for(let t=0;t<24;t++){ const c=D.co[ver][t]; c.ndOpen= t===0? interp(NETDEBT,-1) : D.co[ver][t-1].netDebt; c.nwc=interp(NWCP,t)-interp(NWCP,t-1); }
+})();
+
+// ----- lens & aggregation -----
+function rowMatch(r,L){ return (!L.div||r.div===L.div)&&(!L.st||r.st===L.st)&&(!L.reg||r.reg===L.reg); }
+function lensLevel(L){ const any=!!(L.div||L.st||L.reg); return {row:true, co:!any}; }
+
+// scenario hooks (row level, relative unless noted): vol, won(pts of samples), price, real(pts), prod, cphL, supProd, cphS, consPS, sites, costSite, assets, daRate(pts)
+function getRow(ver,t,r,sc){ const v=D.row[ver][t]&&D.row[ver][t][r.id]; if(!v) return null; if(!sc||ver!=='actual') return v;
+  const g=k=>sc[k]||0; const o={...v};
+  const ex=v.samples*(1-v.won)*(1+g('vol')), wn=v.samples*v.won+v.samples*g('won');
+  o.samples=ex+wn; o.won=wn/o.samples; const k=o.samples/v.samples;
+  o.price=v.price*(1+g('price')); o.real=Math.min(.999,v.real+g('real'));
+  o.rev=o.samples*o.price*o.real;
+  o.lab=v.lab*k/(1+g('prod'))*(1+g('cphL')); o.sup=v.sup*k/(1+g('supProd'))*(1+g('cphS'));
+  o.cons=v.cons*k*(1+g('consPS')); o.comm=v.comm*(o.rev/v.rev)*(1+g('commRate'));
+  o.sites=v.sites*(1+g('sites')); o.site=v.site*(1+g('sites'))*(1+g('costSite')); o.cap=v.cap*(1+g('sites')); o.util=o.samples/o.cap;
+  const rate=v.da/v.assets; o.assets=v.assets*(1+g('assets')); o.da=o.assets*(rate+g('daRate')/12);
+  o.labHc=v.labHc*k/(1+g('prod')); o.supHc=v.supHc*k/(1+g('supProd'));
+  o.cphL=o.lab/o.labHc; o.cphS=o.sup/o.supHc;
+  o.ebitda=o.rev-o.lab-o.sup-o.cons-o.site-o.comm;
+  return o; }
+
+function aggregate(L,P,ver,sc){
+  if(typeof P==='number') P={s:P,e:P};
+  if(P.s<0||P.e>23) return null;
+  const lv=lensLevel(L); const n=P.e-P.s+1; const scA= ver==='actual'? sc : null; const G=k=>(scA&&scA[k])||0;
+  const S={valid:lv,n,rev:0,owed:0,samples:0,won:0,cap:0,lab:0,sup:0,cons:0,site:0,comm:0,segDa:0,labHm:0,supHm:0,sitesM:0,assetsM:0};
+  for(let t=P.s;t<=P.e;t++){ if(!D.row[ver][t]) return null;
+    for(const r of ROWS){ if(!rowMatch(r,L)) continue; const v=getRow(ver,t,r,scA);
+      S.rev+=v.rev; S.owed+=v.samples*v.price; S.samples+=v.samples; S.won+=v.samples*v.won; S.cap+=v.cap; S.lab+=v.lab; S.sup+=v.sup; S.cons+=v.cons; S.site+=v.site; S.comm+=v.comm; S.segDa+=v.da; S.labHm+=v.labHc; S.supHm+=v.supHc; S.sitesM+=v.sites; S.assetsM+=v.assets; } }
+  S.staff=S.lab+S.sup; S.ocost=S.cons+S.site+S.comm; S.commRate=S.rev? S.comm/S.rev:null; S.grossM=S.rev? (S.rev-S.cons)/S.rev:null; S.segEbitda=S.rev-S.staff-S.ocost; S.segEbit=S.segEbitda-S.segDa;
+  S.existing=S.samples-S.won; S.samplesK=S.samples*1e4; S.capK=S.cap*1e4; S.existingK=S.existing*1e4; S.wonK=S.won*1e4;
+  S.price=S.samples? S.owed/S.samples:null; S.revPS=S.samples? S.rev/S.samples:null;
+  S.real=S.owed? S.rev/S.owed:null; S.util=S.cap? S.samples/S.cap:null;
+  S.labHc=S.labHm/n; S.supHc=S.supHm/n; S.hc=S.labHc+S.supHc;
+  S.prod=S.labHm? S.samples*1e7/S.labHm:null; S.supProd=S.supHm? S.samples*1e7/S.supHm:null;
+  S.cphL=S.labHm? S.lab/S.labHm*12*100:null; S.cphS=S.supHm? S.sup/S.supHm*12*100:null;   // ₹ lakh a year
+  S.consPS=S.samples? S.cons/S.samples:null;                                                   // A$ per sample
+  S.sites=S.sitesM/n; S.costSite=S.sitesM? S.site/S.sitesM*12:null;                     // A$k a year per site
+  S.assets=S.assetsM/n; S.daRate=S.assetsM? S.segDa/S.assetsM*12:null;                        // a year
+  S.segMargin=S.rev? S.segEbit/S.rev:null; S.segEbitdaM=S.rev? S.segEbitda/S.rev:null;
+  S.unbilled=S.owed-S.rev; S.labPS=S.samples? S.lab/S.samples:null;
+  if(lv.co){ let corp=0,corpDa=0,fin=0,nci=0,tax=0,leases=0,addback=0,capBase=0,capHub=0,finLease=0,div=0,acq=0,eq=0,other=0,owc=0,recvChg=0,payChg=0,avgND=0,pbt=0,ebitdaC=0,oneoff=0,treas=0,intTax=0,fcfgS=0,ndRed=0;
+    let dND=0, dCap=0; const ndStart=D.co[ver][P.s].ndOpen;
+    for(let t=P.s;t<=P.e;t++){ const c=D.co[ver][t]; const B=D.row[ver][t];
+      let revB=0,revS=0,se=0,daRow=0,ncost=0,ncostB=0,ebB=0,daB=0;
+      for(const r of ROWS){ const b=B[r.id], v=getRow(ver,t,r,scA); revB+=b.rev; revS+=v.rev; se+=v.ebitda; daRow+=v.da; ncost+=v.cons+v.site+v.comm; ncostB+=b.cons+b.site+b.comm; ebB+=b.ebitda; daB+=b.da; }
+      const corpPct=c.corp/revB+G('corpPct'); const corpM=revS*corpPct;
+      // depreciation on extra capex (from the cash side), average rate on lab assets
+      const capB=c.capBase*(1+G('base')), capH=c.capHub*(1+G('hub')); dCap+=(capB+capH)-(c.capBase+c.capHub);
+      const daAdj=dCap*(daB/interp(ASSETS,t));
+      // interest: average net debt × cost of debt
+      const ndBase0=c.ndOpen, ndBase1=c.netDebt; const avgB=(ndBase0+ndBase1)/2; const rate=c.fin/avgB*12;
+      const COST=.12; const avg=c.fin*12/COST; const f=avg*(COST+G('rate'))/12;  // interest = borrowings × cost of borrowing (Himalaya holds net cash; borrowings and rate illustrative)
+      const ebitM=se-daRow-daAdj-corpM; const pbtM=ebitM-f; const taxM=Math.max(0,pbtM)*(c.taxRate+G('tax'));
+      const nciShare=c.nci/((ebB-daB-c.corp)-c.fin)+G('nci'); const nciM=pbtM*nciShare;
+      // cash (mirrors ALS's net debt bridge)
+      const leaseM=c.leases*(1+G('sites'))*(1+G('leaseSite'));
+      const revL=revLTM(t,ver); const recvB=c.dso*revL/365, recvPrev=(t>0?D.co[ver][t-1].dso:c.dso)*revLTM(Math.max(0,t-1),ver)/365;
+      const opexA=(revB-(ebB-c.corp+c.corpDa))*12, opexP=t>0? (aggSimpleRev(t-1,ver)-(aggEb(t-1,ver)-D.co[ver][t-1].corp+D.co[ver][t-1].corpDa))*12 : opexA;
+      const pay=DPO(t)*opexA/365, payPrev=DPO(Math.max(0,t-1))*opexP/365;
+      const rC=recvB-recvPrev, pC=pay-payPrev, oC=c.nwc-rC+pC;
+      const relDso=G('dso')*revL/365/n, relDpo=G('dpo')*opexA/365/n, oAdj=G('owc')/n;
+      const wcM=(rC-relDso)-(pC+relDpo)+(oC+oAdj);
+      const ebitdaM=se-corpM+(c.corpDa);
+      const adjM=ebitdaM-leaseM+c.addback; const fcfgM=adjM-wcM;
+      const leaseInt=c.leases*(t<12? 13.9/107.5 : 15.2/117.3);
+      const oneM=c.oneoff*(1+G('oneoff')), trM=c.treas*(1+G('treas'));
+      const divM=c.div*(1+G('div')), acqM=c.acq+G('acq')/n, eqM=c.eq+G('eq')/n;
+      const itM=(f-leaseInt)+taxM;
+      // base case and the balancing item (currency on net debt, asset sales, timing) so base net debt follows the reported path
+      let ndRedB; { const pbtB=ebB-daB-c.corp-c.fin; const taxB=Math.max(0,pbtB)*c.taxRate; const fcfgB=(ebB-c.corp+c.corpDa)-c.leases+c.addback-c.nwc;
+        ndRedB=fcfgB-(c.capBase+c.capHub)-c.oneoff-c.acq-c.div-c.treas-((c.fin-leaseInt)+taxB)+c.eq; }
+      const fxoB=(ndBase0-ndBase1)-ndRedB; const fxoM=fxoB+G('fxo')/n;
+      const ndRedM=fcfgM-(capB+capH)-oneM-acqM-divM-trM-itM+eqM+fxoM;
+      dND+=-(ndRedM-(ndBase0-ndBase1));
+      corp+=corpM; corpDa+=c.corpDa+daAdj; fin+=f; tax+=taxM; nci+=nciM; pbt+=pbtM; leases+=leaseM; addback+=c.addback; capBase+=capB; capHub+=capH; finLease+=leaseInt;
+      div+=divM; acq+=acqM; eq+=eqM; other+=fxoM; recvChg+=rC-relDso; payChg+=pC+relDpo; owc+=oC+oAdj; avgND+=avg; ebitdaC+=ebitdaM; oneoff+=oneM; treas+=trM; intTax+=itM; fcfgS+=fcfgM; ndRed+=ndRedM; }
+    const ce=D.co[ver][P.e];
+    S.corp=corp; S.corpDa=corpDa; S.segDaG=S.segDa+(corpDa-D.co[ver].slice(P.s,P.e+1).reduce((a,c)=>a+c.corpDa,0));
+    S.corpPct=corp/S.rev; S.daAll=S.segDa+(corpDa-D.co[ver].slice(P.s,P.e+1).reduce((a,c)=>a+c.corpDa,0));
+    S.ebit=S.segEbitda-S.daAll-corp; S.da=S.daAll+D.co[ver].slice(P.s,P.e+1).reduce((a,c)=>a+c.corpDa,0); S.ebitda=ebitdaC;
+    S.fin=fin; S.pbt=pbt; S.tax=tax; S.nci=nci; S.pat=pbt-tax-nci; S.etr=pbt?tax/pbt:null; S.nciShare=pbt?nci/pbt:null;
+    S.avgND=avgND/n; S.rate=S.avgND? fin/n*12/S.avgND:null;
+    S.margin=S.rev? S.ebit/S.rev:null; S.ebitdaM=S.rev? S.ebitda/S.rev:null;
+    S.leases=leases; S.leaseSite=S.sites? leases/n*12*1000/S.sites:null; S.addback=addback; S.adjEbitda=S.ebitda-leases+addback;
+    S.recvChg=recvChg; S.payChg=payChg; S.owc=owc; S.wcChg=recvChg-payChg+owc;
+    S.capBase=capBase; S.capHub=capHub; S.capex=capBase+capHub; S.intTax=intTax; S.oneoff=oneoff; S.treas=treas;
+    S.div=div; S.acq=acq; S.eq=eq; S.other=other; S.ndRed=ndRed;
+    S.netDebt=ndStart-ndRed; S.ndOpen=ndStart;
+    S.dso=ce.dso-G('dso'); S.dpo=DPO(P.e)+G('dpo'); S.recv=S.dso*revLTM(P.e,ver)/365;
+    S.fcfg=fcfgS; S.cfo=fcfgS-intTax; S.conv=S.adjEbitda? S.fcfg/S.adjEbitda:null; S.cac=S.fcfg-S.capex;
+    S.equity=ce.equity; S.shares=ce.shares; S.finDebt=fin-finLease; S.icovP=S.finDebt? S.adjEbitda/S.finDebt:null;
+    S.capEmp=(S.netDebt+S.equity)*1.0042; }
+  return S; }
+function aggEb(t,ver){ let x=0; for(const r of ROWS) x+=D.row[ver][t][r.id].ebitda; return x; }
+function aggCost(t,ver){ let x=0; for(const r of ROWS){ const v=D.row[ver][t][r.id]; x+=v.cons+v.site; } return x; }
+const _revCache={};
+function aggSimpleRev(t,ver){ const k=t+ver; if(_revCache[k]!=null) return _revCache[k]; let rev=0; const src=D.row[ver][t]||D.row.actual[t]; if(!src) return 0;
+  for(const r of ROWS) rev+=src[r.id].rev; return _revCache[k]=rev; }
+function revLTM(e,ver){ if(e<11){ return aggSimpleRev(e,ver)*12; } let s=0; for(let i=e-11;i<=e;i++) s+=aggSimpleRev(i,ver); return s; }
+function ltm(L,e,ver,key,sc){ if(e<11) return null; const S=aggregate(L,{s:e-11,e},ver,sc); return S? S[key]:null; }
+
+
+</script>
+<script>
+// ===== UI =====
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const MINUS='\u2212';
+const ST_L=Object.fromEntries(STREAMS.map(s=>[s.k,s.l]));
+const RG_L=Object.fromEntries(REGIONS.map(r=>[r.k,r.l]));
+const RG_S={rt:'Retail',ob:'Online B2C',wh:'Wholesale',b2b:'B2B'};
+const DV_L=Object.fromEntries(DIVS.map(d=>[d.k,d.l]));
+const ROW_L=Object.fromEntries(ROWS.map(r=>[r.id,`${ST_L[r.st]}, ${RG_S[r.reg]}`]));
+const EMPTY_L=()=>({div:null,st:null,reg:null});
+
+const DEF_COLLAPSE=()=>({comm:true,pbt:false,samples:true,labStaff:true,supStaff:true,cons:true,site:true,da:true,corp:true,wcChg:true,fin:true,tax:true,nci:true,leases:true,intTax:true,capex:true,adjEbitda:true});
+const state={ view:'ov', per:'H1FY27', cmp:'ly', L:EMPTY_L(), tab:'pat',
+  collapsed:DEF_COLLAPSE(), zoom:{}, sel:null, bridgeOpen:{}, alertSel:null, alertFilter:'all', alertTab:'feed',
+  sc:{}, preset:null, treeSc:null, convo:[], rpFilter:'all', full:null };
+
+// ---------- saved items (this browser) ----------
+const STORE_KEY='afl-vt-v1';
+let STORE={scen:[],reports:[],comments:{},alerts:[]};
+try{ const raw=localStorage.getItem(STORE_KEY); if(raw) STORE=Object.assign(STORE,JSON.parse(raw)); }catch(e){}
+function saveStore(){ try{ localStorage.setItem(STORE_KEY,JSON.stringify(STORE)); }catch(e){} }
+function today(){ return new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}); }
+
+// ---------- periods ----------
+function P0(){ return PER_BY[state.per]; }
+function perName(P){ if(!P) return ''; const n=P.e-P.s+1; if(n===1) return MONTHS[P.s].label; const fy=P.e<6?'FY25':P.e<18?'FY26':'FY27'; if(n===12) return fy; if(n===6) return ([6,18].includes(P.s)?'H1 ':'H2 ')+fy; return `${MONTHS[P.s].label} to ${MONTHS[P.e].label}`; }
+function shiftP(P,k){ return P.s-k>=0? {s:P.s-k,e:P.e-k} : null; }
+function cmpPer(P,mode){ mode=mode||state.cmp; if(mode==='ly') return shiftP(P,12); if(mode==='pp') return shiftP(P,P.e-P.s+1); return P; }
+const isFY=P=>P.e-P.s===11;
+
+// ---------- values ----------
+const cache=new Map();
+function avgShares(e){ let s=0; for(let i=e-11;i<=e;i++) s+=D.co.actual[i].shares; return s/12; }
+function vals(L,P,ver,sc){ if(!P) return null; if(ver==='budget' && P.s<18) return null;
+  const key=JSON.stringify([L,P.s,P.e,ver,sc||0]); if(cache.has(key)) return cache.get(key);
+  const S=aggregate(L,{s:P.s,e:P.e},ver,sc); if(!S){ cache.set(key,null); return null; }
+  if(S.valid.co){ const e=P.e; let Y=null; if(e>=11) Y= isFY(P)? S : aggregate(L,{s:e-11,e},ver,sc);
+    if(Y){ S.patL=Y.pat; S.ebitL=Y.ebit; S.adjL=Y.adjEbitda; S.revL=Y.rev; S.ebitdaL=Y.ebitda; S.eps=Y.pat/avgShares(e)*100; S.lev=S.netDebt/Y.adjEbitda; S.roce=Y.ebit/S.capEmp; S.icov=Y.adjEbitda/Y.finDebt; S.convL=Y.conv; S.dsoCash=S.revL/365; }
+    S.hcG=S.hc+400; }
+  // price walk against the same period a year earlier (like-for-like increase assumed at 2.5% a year, illustrative)
+  const Yp=shiftP(P,12); if(Yp){ const Y=aggregate(L,Yp,'actual'); if(Y&&Y.price){ S.priceLY=Y.price; S.priceChg=Y.price*0.025; S.priceMix=S.price-S.priceLY-S.priceChg; } }
+  cache.set(key,S); return S; }
+function cmpOf(L,P,mode,sc){ mode=mode||state.cmp; if(mode==='budget') return vals(L,P,'budget'); return vals(L,cmpPer(P,mode),'actual'); }
+const CMP_L={ly:'Last year',pp:'Previous period',budget:'Plan'};
+function curS(){ return vals(state.L,P0(),'actual',state.treeSc); }
+function cmpS(){ return state.treeSc? vals(state.L,P0(),'actual') : cmpOf(state.L,P0()); }
+function cmpLabel(){ if(state.treeSc) return 'Base'; if(state.cmp==='budget') return 'Plan'; return perName(cmpPer(P0(),state.cmp)); }
+function cmpWord(){ if(state.treeSc) return 'the base case'; if(state.cmp==='budget') return 'the illustrative plan'; return perName(cmpPer(P0(),state.cmp)); }
+
+// ---------- node dictionary ----------
+const SRC_FY='Arvind Fashions Q2 FY27 fact sheet and results presentation; annual report 2026';
+const ILL='Illustrative split, set for the demo';
+const FS='AFL fact sheet, H1 FY27 and H1 FY26';
+const N={
+ pat:{l:'Net profit to AFL',u:'m',g:'co',dir:1,v:S=>S.pat,f:'EBITDA − depreciation − net finance cost − tax − partners’ share',o:'CFO',s:FS+' (continuing operations)'},
+ ebitda:{l:'EBITDA',u:'m',g:'co',dir:1,v:S=>S.ebitda,f:'Brand EBITDA − royalty and ad spend',o:'CFO',s:FS+': excluding other income, Ind AS'},
+ segEbitda:{l:'Brand EBITDA',u:'m',g:'row',dir:1,v:S=>S.segEbitda,f:'Revenue − product cost − commissions − store services − staff − stores',o:'Brand CEOs',s:ILL},
+ rev:{l:'Revenue',u:'m',g:'row',dir:1,v:S=>S.rev,f:'Pieces sold × list price × share of tag price kept',o:'Brand CEOs',s:FS+'. Split by brand and channel illustrative'},
+ samples:{l:'Pieces sold',u:'ks',g:'row',dir:1,v:S=>S.samplesK,f:'Pieces through existing doors + new doors',o:'Brand CEOs',s:ILL},
+ r_samples:{ref:'samples'},
+ existing:{l:'Through existing doors',u:'ks',g:'row',dir:1,lever:1,v:S=>S.existingK,f:'Like-for-like volume',o:'Retail heads',s:ILL},
+ won:{l:'Through new doors',u:'ks',g:'row',dir:1,lever:1,v:S=>S.wonK,f:'Volume from new stores and listings',o:'Retail heads',s:ILL},
+ price:{l:'Tag price per piece',u:'aud',g:'row',dir:1,lever:1,v:S=>S.price,f:'Value at list price ÷ pieces',o:'Merchandising',s:ILL},
+ real:{l:'Share of tag price kept',u:'pct',g:'row',dir:1,lever:1,v:S=>S.real,f:'Share of list price kept after discounts and trade margins',o:'Merchandising',s:ILL},
+ cons:{l:'Product cost',u:'m',g:'row',dir:-1,v:S=>S.cons,f:'Pieces × cost to buy each piece',o:'Sourcing',s:FS+': cost of goods sold'},
+ consPS:{l:'Cost to buy each piece',u:'aud2',g:'row',dir:-1,lever:1,v:S=>S.consPS,f:'Supplier price, duty and inbound freight per piece',o:'Sourcing',s:ILL},
+ comm:{l:'Channel commissions',u:'m',g:'row',dir:-1,v:S=>S.comm,f:'Revenue × commission rate',o:'Channel heads',s:'Annual report FY26 note 23: commission and brokerage ₹687 Cr'},
+ r_rev2:{ref:'rev'},
+ commRate:{l:'Commission rate',u:'pct',g:'row',dir:-1,lever:1,v:S=>S.commRate,f:'Commissions ÷ revenue',o:'Channel heads',s:ILL},
+ labStaff:{l:'Store and logistics services',u:'m',g:'row',dir:-1,v:S=>S.lab,f:'Service staff × cost per person',o:'Operations',s:'Outsourced services, warehouse and freight, annual report FY26 note 23 shares'},
+ labHc:{l:'Service staff',u:'hc',g:'row',dir:-1,v:S=>S.labHc,f:'Pieces ÷ pieces per service person',o:'Operations',s:ILL},
+ prod:{l:'Pieces per service person',u:'spm',g:'row',dir:1,lever:1,v:S=>S.prod,f:'Pieces a month ÷ service staff',o:'Operations',s:ILL},
+ cphL:{l:'Cost per service person',u:'kaud',g:'row',dir:-1,lever:1,v:S=>S.cphL,f:'Service cost ÷ staff, a year',o:'Operations',s:ILL},
+ supStaff:{l:'Employees',u:'m',g:'row',dir:-1,v:S=>S.sup,f:'Employees × cost per employee',o:'HR',s:FS+': employee benefits'},
+ supHc:{l:'Employees',u:'hc',g:'row',dir:-1,v:S=>S.supHc,f:'Pieces ÷ pieces per employee',o:'HR',s:'Annual report: 7,500+ employees; split illustrative'},
+ supProd:{l:'Pieces per employee',u:'spm',g:'row',dir:1,lever:1,v:S=>S.supProd,f:'Pieces a month ÷ employees',o:'HR',s:ILL},
+ cphS:{l:'Cost per employee',u:'kaud',g:'row',dir:-1,lever:1,v:S=>S.cphS,f:'Employee cost ÷ employees, a year',o:'HR',s:ILL},
+ site:{l:'Stores and overheads',u:'m',g:'row',dir:-1,v:S=>S.site,f:'Stores × running cost per store',o:'Retail operations',s:'Other operating costs, annual report FY26 note 23; rent on long leases sits below EBITDA under Ind AS'},
+ sites:{l:'Exclusive stores',u:'n',g:'row',dir:-1,lever:1,v:S=>S.sites,f:'EBOs, average over the period',o:'Retail operations',s:'1,025 EBOs at March 2026, 1,044 at September 2026; split illustrative'},
+ costSite:{l:'Running cost per store',u:'m',g:'row',dir:-1,lever:1,v:S=>S.costSite,f:'Store and overhead cost ÷ stores, a year',o:'Retail operations',s:ILL},
+ corp:{l:'Royalty and ad spend',u:'m',g:'co',dir:-1,v:S=>S.corp,f:'Revenue × royalty and ad spend share',o:'CEO',s:'Annual report FY26 note 23: royalty ₹222 Cr, advertisement ₹213 Cr'},
+ r_rev:{ref:'rev'},
+ corpPct:{l:'Royalty and ad spend share',u:'pct',g:'co',dir:-1,lever:1,v:S=>S.corpPct,f:'Royalty and advertising ÷ revenue',o:'CEO',s:'8.3% of revenue in FY26'},
+ da:{l:'Depreciation',u:'m',g:'co',dir:-1,v:S=>S.daAll,f:'Assets incl. store leases × depreciation rate',o:'Finance',s:FS},
+ assets:{l:'Fixed and lease assets',u:'m',g:'row',dir:-1,lever:1,v:S=>S.assets,f:'Fixed assets and right-of-use assets',o:'Finance',s:'Balance sheet: ₹1,104 Cr at September 2026; split illustrative'},
+ daRate:{l:'Depreciation rate',u:'pct',g:'row',dir:-1,lever:1,v:S=>S.daRate,f:'Depreciation a year ÷ assets',o:'Finance',s:ILL},
+ fin:{l:'Interest',u:'m',g:'co',dir:-1,v:S=>S.fin,f:'Borrowings and leases × net cost',o:'Treasury',s:FS+': interest and finance cost less other income'},
+ avgND:{l:'Borrowings and leases',u:'m',g:'co',dir:-1,lever:1,v:S=>S.avgND,f:'Average borrowings and lease liabilities',o:'Treasury',s:'Balance sheet: ₹690 Cr borrowings and ₹931 Cr leases at September 2026'},
+ rate:{l:'Net cost of funds',u:'pct',g:'co',dir:-1,lever:1,v:S=>S.rate,f:'Interest ÷ borrowings and leases',o:'Treasury',s:'Estimate'},
+ tax:{l:'Tax',u:'m',g:'co',dir:-1,v:S=>S.tax,f:'Profit before tax × tax rate',o:'Tax',s:FS},
+ pbt:{l:'Profit before tax',u:'m',g:'co',dir:1,v:S=>S.pbt,f:'EBITDA − depreciation − net finance cost',o:'CFO',s:FS},
+ etr:{l:'Tax rate',u:'pct',g:'co',dir:-1,lever:1,v:S=>S.etr,f:'Tax ÷ profit before tax',o:'Tax',s:FS},
+ nci:{l:'Partners’ share',u:'m',g:'co',dir:-1,v:S=>S.nci,f:'Profit after tax × partners’ share',o:'CFO',s:FS+': non-controlling interest'},
+ r_pat:{l:'Profit after tax',u:'m',g:'co',dir:1,v:S=>S.pbt-S.tax,f:'Profit before tax − tax',o:'CFO',s:FS},
+ nciShare:{l:'Partners’ share of profit',u:'pct',g:'co',dir:-1,lever:1,v:S=>S.nciShare,f:'Partners’ share ÷ profit before tax',o:'CFO',s:FS},
+ ndRed:{l:'Net debt paid down',u:'m',g:'co',dir:1,v:S=>S.ndRed,f:'Free cash flow − capex − interest and tax + other',o:'CFO',s:'Net debt ₹467 Cr (March 2026) to ₹583 Cr (September 2026), balance sheet'},
+ fcfg:{l:'Cash from trading',u:'m',g:'co',dir:1,v:S=>S.fcfg,f:'EBITDA − lease rent − working capital',o:'CFO',s:'Estimate'},
+ r_ebitda:{ref:'ebitda'},
+ leases:{l:'Lease rent paid',u:'m',g:'co',dir:-1,lever:1,v:S=>S.leases,f:'Store lease payments (below EBITDA under Ind AS)',o:'Retail operations',s:'Gap between Ind AS and pre-Ind AS EBITDA, Q2 FY27: about 4.6% of revenue'},
+ wcChg:{l:'Working capital',u:'m',g:'co',dir:-1,v:S=>S.wcChg,f:'Receivables − payables + inventory',o:'CFO',s:'Net working capital ₹969 Cr (March 2026) to ₹1,088 Cr (September 2026)'},
+ recvChg:{l:'More owed by customers',u:'m',g:'co',dir:-1,v:S=>S.recvChg,f:'From days to get paid',o:'Credit control',s:'Receivable days 49 at September 2026'},
+ dso:{l:'Days to get paid',u:'days',g:'co',dir:-1,lever:1,v:S=>S.dso,f:'Receivable days',o:'Credit control',s:'Results presentation: 56 (Sep 2025), 54 (Mar 2026), 49 (Sep 2026)'},
+ payChg:{l:'More owed to suppliers',u:'m',g:'co',dir:1,v:S=>S.payChg,f:'From days to pay suppliers',o:'Sourcing',s:'Payable days 92 at September 2026'},
+ dpo:{l:'Days to pay suppliers',u:'days',g:'co',dir:1,lever:1,v:S=>S.dpo,f:'Payable days',o:'Sourcing',s:'Results presentation'},
+ owc:{l:'Inventory and other',u:'m',g:'co',dir:-1,lever:1,v:S=>S.owc,f:'Inventory build and other items',o:'Merchandising',s:'Balancing figure to reported net working capital; inventory days 108 at September 2026'},
+ capBase:{l:'Capex',u:'m',g:'co',dir:-1,lever:1,v:S=>S.capex,f:'Stores, systems and fit-outs',o:'CFO',s:'Estimate'},
+ intTax:{l:'Interest and tax paid',u:'m',g:'co',dir:-1,v:S=>S.intTax,f:'From the profit tree',o:'CFO',s:'Estimate'},
+ r_fin:{ref:'fin'}, r_tax:{ref:'tax'},
+ other:{l:'Other cash items',u:'m',g:'co',dir:1,lever:1,v:S=>S.other,f:'Lease principal timing, minority dividends and other',o:'CFO',s:'Balancing figure so net debt matches the balance sheet'},
+ netDebt:{l:'Net debt',u:'m',g:'co',dir:-1,v:S=>S.netDebt,f:'Borrowings − cash',o:'Treasury',s:'Balance sheet'},
+ ebitdaM:{l:'EBITDA margin',u:'pct',g:'co',dir:1,v:S=>S.ebitdaM,f:'EBITDA ÷ revenue',o:'CFO',s:FS},
+ grossM:{l:'Gross margin',u:'pct',g:'row',dir:1,v:S=>S.grossM,f:'(Revenue − product cost) ÷ revenue',o:'Merchandising',s:FS},
+ segMargin:{l:'Brand EBITDA margin',u:'pct',g:'row',dir:1,v:S=>S.segEbitdaM,f:'Brand EBITDA ÷ revenue',o:'Brand CEOs',s:ILL},
+ util:{l:'Sell-through',u:'pct',g:'row',dir:1,v:S=>S.util,f:'Pieces sold ÷ pieces bought',o:'Merchandising',s:ILL},
+ hc:{l:'People',u:'hc',g:'row',dir:-1,v:S=>S.hc,f:'Service staff + employees',o:'HR',s:ILL},
+ unbilled:{l:'Discounts and trade margins',u:'m',g:'row',dir:-1,v:S=>S.unbilled,f:'Value at list price − revenue',o:'Merchandising',s:ILL},
+ staff:{l:'People costs',u:'m',g:'row',dir:-1,v:S=>S.staff,f:'Service staff + employees',o:'HR',s:ILL},
+ ocost:{l:'Product, commission and store costs',u:'m',g:'row',dir:-1,v:S=>S.ocost,f:'Product + commissions + stores',o:'Operations',s:ILL},
+};
+
+// plain-language labels and explanations for every box
+const PL={
+ pat:{l:'Net profit to AFL shareholders',f:'Profit before tax, minus tax, minus the part that belongs to partners in AFL’s subsidiaries'},
+ r_pat:{l:'Profit after tax',f:'Profit before tax minus tax'},
+ pbt:{f:'EBITDA minus depreciation minus interest'},
+ ebitda:{f:'Profit from the brands, minus royalty and advertising. Operating profit before interest, tax and depreciation'},
+ segEbitda:{l:'Profit from the brands',f:'Revenue minus the cost of the clothes, commissions, store and warehouse services, employees and store running costs',s:'Aistra estimate for each brand and channel; the company total is reported'},
+ rev:{f:'Pieces sold × tag price × share of the tag price AFL keeps',s:'Reported by AFL. The split by brand and channel is an Aistra estimate'},
+ samples:{f:'Pieces sold in existing stores and channels, plus pieces sold through new stores',s:'Aistra estimate; AFL does not report pieces'},
+ existing:{l:'Pieces sold in existing stores and channels',f:'Volume through stores, websites and partners AFL already has'},
+ won:{l:'Pieces sold through new stores',f:'Volume from stores and listings opened in the period'},
+ price:{l:'Tag price per piece',f:'Average price on the tag before any discount'},
+ real:{l:'Share of tag price AFL keeps',f:'What AFL collects after discounts, sale prices and the margin wholesale partners keep, as a share of the tag price'},
+ cons:{l:'Cost of the clothes',f:'Pieces sold × cost to buy each piece',s:'Reported by AFL as cost of goods sold'},
+ consPS:{l:'Cost to buy each piece',f:'Supplier price plus import duty and freight to AFL’s warehouse'},
+ comm:{l:'Commissions to channel partners',f:'Revenue × commission rate',s:'AFL annual report 2026: ₹687 Cr in FY26, paid to franchise store owners, marketplaces and distributors'},
+ commRate:{l:'Commission rate',f:'Commissions as a share of revenue'},
+ labStaff:{l:'Store and warehouse services',f:'Number of outsourced workers × cost per worker',s:'AFL annual report 2026: outsourced services, warehousing and freight, applied to each half'},
+ labHc:{l:'Outsourced workers',f:'Pieces sold ÷ pieces handled per worker'},
+ prod:{l:'Pieces handled per worker',f:'Pieces a month ÷ outsourced workers'},
+ cphL:{l:'Cost per outsourced worker',f:'Service cost ÷ workers, a year'},
+ supStaff:{l:'Employees',f:'Number of employees × cost per employee'},
+ supHc:{l:'Number of employees',f:'Pieces sold ÷ pieces per employee',s:'AFL reports 7,500+ employees; the split is an Aistra estimate'},
+ supProd:{f:'Pieces sold a month ÷ employees'},
+ cphS:{f:'Employee cost ÷ employees, a year'},
+ site:{l:'Store running costs',f:'Number of stores × running cost per store',s:'Other operating costs in the AFL annual report 2026. Rent on long leases is not here; it sits in depreciation and interest'},
+ sites:{l:'Number of AFL stores',f:'Stores AFL runs itself, averaged over the period',s:'1,025 at March 2026 and 1,044 at September 2026; the split is an Aistra estimate'},
+ costSite:{f:'Store running cost ÷ stores, a year'},
+ corp:{f:'Revenue × royalty and advertising share',s:'AFL annual report 2026: royalty ₹222 Cr and advertising ₹213 Cr in FY26'},
+ corpPct:{f:'Royalty and advertising as a share of revenue'},
+ da:{f:'Fixed assets and store leases × depreciation rate. Includes most store rent, under Indian accounting rules'},
+ fin:{l:'Interest',f:'Borrowings and lease liabilities × interest rate, less interest and other income earned',s:'Reported by AFL as finance cost, net of other income'},
+ avgND:{f:'Average loans plus lease liabilities'},
+ rate:{l:'Interest rate',f:'Interest ÷ loans and lease liabilities'},
+ nci:{l:'Partners’ share of profit',f:'Profit before tax × partners’ share',s:'Reported by AFL as non-controlling interest: profit in subsidiaries that belongs to minority partners'},
+ nciShare:{l:'Partners’ share',f:'Partners’ share of profit as a share of profit before tax'},
+ ndRed:{l:'Fall in net debt',f:'Cash from trading, minus capital spending, minus interest and tax paid, plus other items'},
+ fcfg:{f:'EBITDA, minus store rent paid, minus extra cash tied up in stock and credit'},
+ leases:{l:'Store rent paid',f:'Cash paid on long store leases. Not in EBITDA under Indian accounting rules, but it is real cash'},
+ wcChg:{l:'Extra cash tied up in stock and credit',f:'More owed by customers, plus more stock, minus more owed to suppliers',s:'Net working capital ₹969 Cr at March 2026 and ₹1,088 Cr at September 2026'},
+ owc:{l:'Cash tied up in stock and other items',f:'Mainly inventory; inventory was 108 days of sales at September 2026'},
+ capBase:{l:'Capital spending',f:'Spending on new stores, fit-outs and systems'},
+ grossM:{f:'Revenue minus the cost of the clothes, as a share of revenue'},
+ util:{l:'Share of stock sold',f:'Pieces sold ÷ pieces bought'},
+ unbilled:{l:'Discounts and partner margins',f:'Value at tag price minus revenue'},
+};
+for(const k in PL) if(N[k]) Object.assign(N[k],PL[k]);
+function nd(id){ const n=N[id]; if(n&&n.ref) return {...N[n.ref],...n,id,refId:n.ref,isRef:true}; return {...n,id}; }
+
+const TREES={
+ pat:{title:'Profit tree',roots:[{id:'pat',label:'Net profit to AFL'}],
+   ch:{pat:[['r_pat','+'],['nci','−']],r_pat:[['pbt','+'],['tax','−']],pbt:[['ebitda','+'],['da','−'],['fin','−']],
+     ebitda:[['segEbitda','+'],['corp','−']],
+     segEbitda:[['rev','+'],['cons','−'],['comm','−'],['labStaff','−'],['supStaff','−'],['site','−']],
+     rev:[['samples','×'],['price','×'],['real','×']],samples:[['existing','+'],['won','+']],
+     cons:[['r_samples','×'],['consPS','×']],comm:[['r_rev2','×'],['commRate','×']],
+     labStaff:[['labHc','×'],['cphL','×']],labHc:[['r_samples','÷'],['prod','÷']],supStaff:[['supHc','×'],['cphS','×']],supHc:[['r_samples','÷'],['supProd','÷']],
+     site:[['sites','×'],['costSite','×']],da:[['assets','×'],['daRate','×']],corp:[['r_rev','×'],['corpPct','×']],
+     fin:[['avgND','×'],['rate','×']],tax:[['etr','×']],nci:[['nciShare','×']]}},
+ cash:{title:'Cash tree',roots:[{id:'ndRed',label:'Net debt paid down'}],
+   ch:{ndRed:[['fcfg','+'],['capBase','−'],['intTax','−'],['other','+']],fcfg:[['r_ebitda','+'],['leases','−'],['wcChg','−']],
+     wcChg:[['recvChg','+'],['payChg','−'],['owc','+']],recvChg:[['dso','']],payChg:[['dpo','']],intTax:[['r_fin','+'],['r_tax','+']]}},
+};
+const TABS={pat:{l:'Profit and cash',trees:['pat','cash']},inv:{l:'Reported figures',trees:[]}};
+
+// ---------- formatting ----------
+function num(v,dp){ if(v==null||!isFinite(v)) return '–'; const s=Math.abs(v).toLocaleString('en-IN',{minimumFractionDigits:dp,maximumFractionDigits:dp}); return (v<0?MINUS:'')+s; }
+function am(v,dp){ if(v==null||!isFinite(v)) return '–'; const a=Math.abs(v); dp=dp==null?(a>=100?0:1):dp; return (v<0?MINUS:'')+'₹'+num(a,dp)+' Cr'; }
+function fvt(u,v){ return u==='m'? am(v) : fv(u,v).m; }
+function ad(v,dp){ if(v==null||!isFinite(v)) return '–'; return (v<0?MINUS:'')+'₹'+num(Math.abs(v),dp==null?1:dp); }
+function fv(u,v){ if(v==null||!isFinite(v)) return {m:'–',s:''};
+  switch(u){ case 'm': return {m:am(v),s:''}; case 'ks': return Math.abs(v)>=999.5? {m:num(v/1000,2)+'M',s:''} : {m:num(v,0)+'k',s:''}; case 'aud': return {m:ad(v,1),s:''};
+   case 'pct': return {m:num(v*100,1)+'%',s:''}; case 'days': return {m:num(v,0),s:'days'}; case 'x': return {m:num(v,1)+'x',s:''}; case 'hc': return {m:num(v,0),s:''};
+   case 'spm': return {m:num(v,0),s:'a month'}; case 'aud2': return {m:ad(v,2),s:''}; case 'n': return {m:num(v,0),s:''}; case 'pct2': return {m:num(v*100,2)+'%',s:''}; case 'kaud': return {m:'₹'+num(v,1)+' lakh',s:'a year'}; case 'cps': return {m:num(v,1)+'c',s:''}; }
+  return {m:num(v,1),s:''}; }
+function fvs(u,v){ const x=fv(u,v); if(u==='m') return am(v); if(u==='ks') return x.m+' pieces'; if(u==='hc') return x.m+' people'; return x.s? x.m+' '+x.s : x.m; }
+const DP={m:1,ks:0,aud:1,aud2:2,n:0,days:0,x:1,hc:0,spm:0,kaud:1,cps:1};
+function delta(u,a,b,dir){ if(a==null||b==null||!isFinite(a)||!isFinite(b)) return {txt:'',pc:'',cls:'flat'};
+  const d=a-b; let txt,pc='',zero;
+  if(u==='pct'||u==='pct2'){ const dp2=u==='pct2'?2:1; zero=Math.abs(d)<0.5*Math.pow(10,-dp2)/100; txt=(zero?'':(d>=0?'+':MINUS))+num(Math.abs(d*100),dp2)+' pts'; }
+  else { const dp=DP[u]==null?1:DP[u]; zero=Math.abs(d)<0.5*Math.pow(10,-dp); txt=zero? num(0,dp) : (d>=0?'+':MINUS)+(u==='m'? am(Math.abs(d)) : num(Math.abs(d),dp));
+    if(u==='aud'||u==='aud2') txt=zero? '₹0': (d>=0?'+':MINUS)+'₹'+num(Math.abs(d),u==='aud2'?2:1); if(u==='kaud') txt=zero?'₹0':(d>=0?'+':MINUS)+'₹'+num(Math.abs(d),1)+' lakh';
+    if(!zero && !(Math.abs(b)<1e-9 || (a<0)!==(b<0) || b<0)) pc=(d>=0?'+':MINUS)+num(Math.abs(d/b*100),1)+'%'; }
+  const cls= zero? 'flat' : (d*dir>0?'good':'bad');
+  return {txt,pc,cls,d}; }
+// one change number per box: % for money and counts, absolute for ratios
+function chip(u,dl){ if(!dl.txt) return ''; if(['m','ks','hc'].includes(u)&&dl.pc) return dl.pc; if(u==='m'&&dl.d!=null){ if(dl.cls==='flat') return '0'; const a=Math.abs(dl.d); return (dl.d>=0?'+':MINUS)+am(a,a>=100?0:1); } return dl.txt.replace(' pts',' pts'); }
+
+// ---------- nav and filters ----------
+const ICONS={ov:'<svg viewBox="0 0 24 24"><path d="M4 19h16M6 16V9M11 16V5M16 16v-5"/></svg>',tree:'<svg viewBox="0 0 24 24"><path d="M4 5v14M4 12h6M10 7h4M10 17h4M10 7v10M14 7h6M14 17h6"/></svg>',
+ sc:'<svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>',
+ rp:'<svg viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6"/></svg>',
+ ask:'<svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4zM8 9h8M8 12h5"/></svg>',
+ al:'<svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4zM10 21h4"/></svg>'};
+function renderNav(){ const al=alertsFor().filter(a=>a.status==='open'||a.status==='esc').length;
+  $('#nav').innerHTML=[['ov','Overview'],['tree','Value tree'],['sc','Scenarios'],['rp','Reports'],['ask','Ask'],['al','Alerts']].map(([k,l])=>`<button class="${state.view===k?'on':''}" data-v="${k}">${ICONS[k]}<span class="lab">${l}</span>${k==='al'&&al?`<span class="badge">${al}</span>`:''}</button>`).join('');
+  $('#nav').querySelectorAll('button').forEach(b=>b.onclick=()=>{ state.view=b.dataset.v; renderAll(); window.scrollTo(0,0); }); }
+function opt(v,l,cur){ return `<option value="${v}" ${cur===v?'selected':''}>${esc(l)}</option>`; }
+function renderFilters(){ const L=state.L; const v=state.view; const top=$('.top');
+  if(v==='ov'){ top.style.display='none'; return; } top.style.display='';
+  const full=v==='tree';
+  let html=`<div class="sel"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color:var(--mute)"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><select id="fPer" aria-label="Period">
+    <optgroup label="Reported periods">${PERIODS.filter(p=>p.kind!=='month').map(p=>opt(p.k,p.l,state.per)).join('')}</optgroup><optgroup label="Months">${PERIODS.filter(p=>p.kind==='month').map(p=>opt(p.k,p.l,state.per)).join('')}</optgroup></select></div>`;
+  if(full){ const sts=STREAMS.filter(s=>!L.div||s.d===L.div);
+    html+=`<div class="seg" role="group" aria-label="Compare with"><span>vs</span>${['ly','pp','budget'].map(k=>`<button data-c="${k}" class="${state.cmp===k?'on':''}">${k==='budget'?'Plan (illustrative)':CMP_L[k]}</button>`).join('')}</div>
+   <div class="sel"><label for="fDiv">Division</label><select id="fDiv">${opt('','All',L.div||'')}${DIVS.map(d=>opt(d.k,d.l,L.div)).join('')}</select></div>
+   <div class="sel"><label for="fSt">Brand</label><select id="fSt">${opt('','All',L.st||'')}${sts.map(s=>opt(s.k,s.l,L.st)).join('')}</select></div>
+   <div class="sel"><label for="fReg">Channel</label><select id="fReg">${opt('','All',L.reg||'')}${REGIONS.map(r=>opt(r.k,RG_S[r.k],L.reg)).join('')}</select></div>`; }
+  $('#filters').innerHTML=html;
+  $('#fPer').onchange=e=>{ state.per=e.target.value; renderAll(); };
+  if(!full) return;
+  $('#filters').querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{ state.cmp=b.dataset.c; renderAll(); });
+  $('#fDiv').onchange=e=>{ state.L.div=e.target.value||null; if(state.L.st&&STREAM_BY[state.L.st].d!==state.L.div&&state.L.div) state.L.st=null; renderAll(); };
+  $('#fSt').onchange=e=>{ state.L.st=e.target.value||null; if(state.L.st) state.L.div=STREAM_BY[state.L.st].d; renderAll(); };
+  $('#fReg').onchange=e=>{ state.L.reg=e.target.value||null; renderAll(); };
+}
+function lensText(){ const L=state.L, parts=[]; if(L.st) parts.push(ST_L[L.st]); else if(L.div) parts.push(DV_L[L.div]); if(L.reg) parts.push(RG_L[L.reg]); return parts.join(', '); }
+function lensNote(){ const t=lensText(); if(!t) return '';
+  return `<div class="lens-note">Filtered to <b>${esc(t)}</b>. Corporate costs, interest, tax and cash are held for the Group only, so those boxes are left blank.<button id="clrLens">Clear filters</button></div>`; }
+
+// ---------- metric cards ----------
+function spark(fn){ const pts=[]; const e=P0().e; for(let i=Math.max(0,e-11);i<=e;i++){ const S=vals(state.L,{s:i,e:i},'actual'); const v=S?fn(S):null; if(v!=null&&isFinite(v)) pts.push(v); }
+  if(pts.length<2) return ''; const mn=Math.min(...pts),mx=Math.max(...pts),r=mx-mn||1; const w=160,h=20;
+  const d=pts.map((v,i)=>`${(i/(pts.length-1)*w).toFixed(1)},${(h-(v-mn)/r*h+2).toFixed(1)}`).join(' ');
+  const last=d.split(' ').pop().split(',');
+  return `<svg viewBox="0 0 ${w} ${h+4}" preserveAspectRatio="none" aria-hidden="true"><title>Last 12 months</title><polyline points="${d}" fill="none" stroke="var(--g1)" stroke-width="1.6"/><circle cx="${last[0]}" cy="${last[1]}" r="2.6" fill="var(--g2)"/></svg>`; }
+function renderKPIs(){ const S=curS(), C=cmpS(); const lv=S.valid;
+  const K=[['rev','Revenue',S=>S.rev,'row','m',1,'Pieces × list price × share of tag price kept'],
+   ['grossM','Gross margin',S=>S.grossM,'row','pct',1,'(Revenue − product cost) ÷ revenue'],
+   lv.co? ['ebitdaM','EBITDA margin',S=>S.ebitdaM,'co','pct',1,'EBITDA excluding other income ÷ revenue'] : ['segMargin','Brand EBITDA margin',S=>S.segEbitdaM,'row','pct',1,'Brand EBITDA ÷ revenue'],
+   ['commRate','Commission rate',S=>S.commRate,'row','pct',-1,'Channel commissions ÷ revenue'],
+   ['pat','Net profit to AFL',S=>S.pat,'co','m',1,'After partners’ share, continuing operations'],
+   ['dso','Days to get paid',S=>S.dso,'co','days',-1,'Receivable days']];
+  return `<div class="stats">${K.map(([id,l,fn,g,u,dir,cap])=>{ const ok=g==='row'||lv.co;
+    if(!ok) return `<div class="stat na"><div class="sl">${l}</div><div class="sv">Group only</div><div class="sc">Clear the filters to see it</div></div>`;
+    const a=fn(S), b=C?fn(C):null; const dl=delta(u,a,b,dir); const x=fv(u,a);
+    return `<button class="stat" data-node="${id}" title="${esc(cap)}"><div class="sl">${l}</div><div class="sv">${x.m}${x.s&&!['pct','aud','spm'].includes(u)?`<small>${x.s}</small>`:''}</div><div class="sc">${esc(cmpLabel())} ${b!=null?fvt(u,b):'–'} <span class="sd ${dl.cls}-t">${chip(u,dl)}</span></div><div class="spk">${spark(fn)}</div></button>`; }).join('')}</div>`; }
+
+// ---------- tree layout & render ----------
+const W=216,H=98,CG=58,RG=16;
+function countDesc(def,id){ const c=def.ch[id]||[]; return c.reduce((a,[k])=>a+1+countDesc(def,k),0); }
+function layoutTree(def){ const nodes=[], edges=[], labels=[]; let y=0; let maxD=0;
+  function place(id,d,op,parent){ const kids=(def.ch[id]||[]); const col=state.collapsed[id]; const n={id,d,x:d*(W+CG),op,parent,kids:kids.length,collapsed:!!col};
+    maxD=Math.max(maxD,d); nodes.push(n);
+    if(kids.length && !col){ let first=true; for(const [k,o] of kids){ const c=place(k,d+1,o,n); if(first){ n.y=c.y; first=false; } edges.push([n,c]); } }
+    else { n.y=y; y+=H+RG; }
+    return n; }
+  def.roots.forEach(r=>{ labels.push({y,text:r.label}); y+=26; place(r.id,0,null,null); y+=22; });
+  return {nodes,edges,labels,w:(maxD+1)*(W+CG)-CG+8,h:y}; }
+function nodeHTML(n,S,C){ const meta=nd(n.id); const lv=S.valid; const g=meta.g;
+  const valid= g==='row' || (g==='co'&&lv.co);
+  const sel= state.sel===n.id? ' picked':'';
+  const style=`left:${n.x}px;top:${n.y}px`;
+  const tog= n.kids? `<span class="tog" data-tog="${n.id}" role="button" tabindex="0" aria-label="${n.collapsed?'Expand':'Collapse'} ${esc(meta.l)}">${n.collapsed?'+'+countDesc(TREES[treeOf(n.id)],n.id):MINUS}</span>`:'';
+  if(!valid) return `<div class="node off${n.kids?' haskids':''}" style="${style}" title="Group only"><div class="n">${esc(meta.l)}</div><div class="val">Held for the Group only</div>${tog}</div>`;
+  const a=meta.v(S), b=C?meta.v(C):null; const dl=delta(meta.u,a,b,meta.dir); const x=fv(meta.u,a);
+  const ref=meta.isRef?' ref':''; const pill= !n.kids&&meta.lever&&!meta.isRef? '<span class="lvp">Lever</span>' : (!n.kids&&!meta.isRef&&!meta.lever? '<span class="lvp res">Result</span>':'');
+  return `<div class="node ${dl.cls}${ref}${sel}${n.kids?' haskids':''}" style="${style}" data-node="${meta.isRef?meta.refId:n.id}" role="button" tabindex="0" aria-label="${esc(meta.l)}">${meta.isRef?'<svg class="ext" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><path d="M10 14l6-6M11 8h5v5"/></svg>':''}<div class="n">${esc(meta.l)}</div>${pill}<div class="val">${x.m}${x.s?`<small>${x.s}</small>`:''}</div><div class="ft"><span>${esc(cmpLabel())} ${b!=null?fvt(meta.u,b):'–'}</span>${dl.txt?`<span class="dchip ${dl.cls}">${chip(meta.u,dl)}</span>`:''}</div>${tog}</div>`; }
+function treeOf(id){ for(const k in TREES){ const def=TREES[k]; if(def.ch[id]||def.roots.find(r=>r.id===id)) return k; for(const kids of Object.values(def.ch)) if(kids.find(c=>c[0]===id)) return k; } return 'pat'; }
+function treePanel(key){ const def=TREES[key]; const L=layoutTree(def); const S=curS(), C=cmpS();
+  let svg='', ops='';
+  for(const [p,c] of L.edges){ const sx=p.x+W+CG/2, py=p.y+H/2, cy=c.y+H/2;
+    svg+=`<path d="M${p.x+W} ${py} H${sx} V${cy} H${c.x}" fill="none" stroke="var(--edge)" stroke-width="1.4"/>`;
+    if(c.op) ops+=`<div class="op" style="left:${sx-11}px;top:${cy-11}px">${c.op}</div>`; }
+  const labels=L.labels.map(l=>`<div class="col-label" style="left:0;top:${l.y}px">${esc(l.text)}</div>`).join('');
+  return `<section class="panel${state.full===key?' full':''}" data-tree="${key}"><div class="panel-h"><h2>${def.title}</h2><span class="sub">${esc(perName(P0()))}, against ${esc(cmpWord())}</span><button class="btn fs" data-fs="${key}">${state.full===key?'Exit full screen':'Full screen'}</button></div>
+   <div class="tree-wrap" id="tw-${key}"><div class="tree-inner" id="ti-${key}" style="width:${L.w}px;height:${L.h}px" data-w="${L.w}" data-h="${L.h}"><svg class="tree-svg" width="${L.w}" height="${L.h}">${svg}</svg>${labels}${L.nodes.map(n=>nodeHTML(n,S,C)).join('')}${ops}</div></div>
+   <div class="zoom"><button data-z="expand">Expand all</button><button data-z="reset">Reset</button><i></i><button data-z="fit">Fit</button><button data-z="out" aria-label="Zoom out">${MINUS}</button><span id="zp-${key}">100%</span><button data-z="in" aria-label="Zoom in">+</button></div></section>`; }
+function applyZoom(key){ const inner=$('#ti-'+key), wrap=$('#tw-'+key); if(!inner||!wrap) return;
+  const w=+inner.dataset.w, h=+inner.dataset.h; let z=state.zoom[key];
+  if(z==null||z==='fit'){ const avail=wrap.clientWidth-44; const full=state.full===key; z=full? Math.max(.6,Math.min(1.15,avail/w)) : Math.max(.86,Math.min(1,avail/w)); }
+  inner.style.transform=`scale(${z})`; inner.style.width=w+'px'; inner.style.height=h+'px';
+  inner.parentElement.style.height= state.full===key? '' : (h*z+76)+'px'; inner.style.marginRight=(-(w*(1-z)))+'px'; inner.style.marginBottom=(-(h*(1-z)))+'px';
+  const zp=$('#zp-'+key); if(zp) zp.textContent=Math.round(z*100)+'%'; wrap.dataset.z=z; }
+function bindTree(root){ root.querySelectorAll('.node[data-node]').forEach(el=>{ el.onclick=e=>{ if(e.target.closest('[data-tog]')) return; openNode(el.dataset.node); }; el.onkeydown=e=>{ if(e.key==='Enter'&&!e.target.closest('[data-tog]')) openNode(el.dataset.node); }; });
+  root.querySelectorAll('[data-tog]').forEach(el=>{ const go=e=>{ e.stopPropagation(); const id=el.dataset.tog; state.collapsed[id]=!state.collapsed[id]; renderPage(); }; el.onclick=go; el.onkeydown=e=>{ if(e.key==='Enter') go(e); }; });
+  root.querySelectorAll('[data-fs]').forEach(b=>b.onclick=()=>{ const k=b.dataset.fs; state.full= state.full===k? null : k; state.zoom[k]='fit'; document.body.style.overflow=state.full?'hidden':''; renderPage(); });
+  root.querySelectorAll('.panel[data-tree]').forEach(p=>{ const key=p.dataset.tree; p.querySelectorAll('[data-z]').forEach(b=>b.onclick=()=>{ const wrap=$('#tw-'+key); const cz=+wrap.dataset.z||1;
+    const a=b.dataset.z; if(a==='fit') state.zoom[key]='fit'; else if(a==='in') state.zoom[key]=Math.min(1.4,cz+.1); else if(a==='out') state.zoom[key]=Math.max(.4,cz-.1);
+    else if(a==='expand'){ Object.keys(TREES[key].ch).forEach(k=>state.collapsed[k]=false); renderPage(); return; }
+    else if(a==='reset'){ state.collapsed=DEF_COLLAPSE(); state.zoom[key]='fit'; renderPage(); return; }
+    applyZoom(key); }); }); }
+
+// ---------- bridge (to underlying EBIT, or stream EBIT when filtered) ----------
+function bridge(L,P,mode,sc){ const lv=lensLevel(L); let BP, bver='actual', bsc=null;
+  if(sc){ BP=P; } else if(mode==='budget'){ BP=P; bver='budget'; if(P.s<18) return null; } else { BP=cmpPer(P,mode); if(!BP) return null; }
+  const keys=['vol','price','bill','cons','comm','lab','sup','site','da']; const steps={}; keys.forEach(k=>steps[k]={v:0,by:{}});
+  const add=(k,p,v)=>{ steps[k].v+=v; steps[k].by[p]=(steps[k].by[p]||0)+v; };
+  for(let i=0;i<=P.e-P.s;i++){ const ta=P.s+i, tb=BP.s+i;
+    for(const r of ROWS){ if(!rowMatch(r,L)) continue; const a=getRow('actual',ta,r,sc), b=getRow(bver,tb,r,bsc); if(!a||!b) continue;
+      add('vol',r.id,(a.samples-b.samples)*b.price*b.real); add('price',r.id,a.samples*(a.price-b.price)*b.real); add('bill',r.id,a.samples*a.price*(a.real-b.real));
+      add('lab',r.id,-(a.lab-b.lab)); add('sup',r.id,-(a.sup-b.sup)); add('cons',r.id,-(a.cons-b.cons)); add('comm',r.id,-(a.comm-b.comm)); add('site',r.id,-(a.site-b.site)); add('da',r.id,-(a.da-b.da)); } }
+  const SA=vals(L,P,'actual',sc), SB=vals(L,BP,bver);
+  const lab={vol:'Pieces sold',price:'List price and mix',bill:'Share of tag price kept',cons:'Product cost',comm:'Channel commissions',lab:'Store and logistics services',sup:'Employees',site:'Stores and overheads',da:'Depreciation'};
+  const out=keys.map(k=>({k,l:lab[k],v:steps[k].v,by:steps[k].by}));
+  out.splice(out.findIndex(x=>x.k==='da'),1);
+  let metric='brand EBITDA', a=SA.segEbitda, b=SB.segEbitda;
+  if(lv.co){ out.push({k:'corp',l:'Royalty and ad spend',v:-(SA.corp-SB.corp),by:{}}); metric='EBITDA'; a=SA.ebitda; b=SB.ebitda; }
+  return {metric,a,b,steps:out}; }
+const PHR={vol:['fewer pieces sold','more pieces sold'],price:['lower prices and mix','higher prices and mix'],bill:['deeper discounts','fewer discounts'],cons:['higher product costs','lower product costs'],comm:['higher commissions','lower commissions'],lab:['higher store and logistics costs','lower store and logistics costs'],sup:['higher employee costs','lower employee costs'],site:['higher store costs','lower store costs'],da:['higher depreciation','lower depreciation'],corp:['more royalty and ad spend','less royalty and ad spend']};
+function cap1(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+function bridgeSummary(br,lbl){ if(!br) return ''; const gap=br.a-br.b; const M=cap1(br.metric);
+  const dir=gap<0?'below':'above'; const main=br.steps.filter(s=>Math.sign(s.v)===Math.sign(gap)&&Math.abs(s.v)>0.05).sort((x,y)=>Math.abs(y.v)-Math.abs(x.v)).slice(0,3);
+  if(Math.abs(gap)<0.05) return `${M} was in line with ${lbl}.`;
+  const parts=main.map(s=>`${PHR[s.k][s.v<0?0:1]} (${s.v<0?MINUS:'+'}${am(Math.abs(s.v))})`);
+  const list=parts.length>2? parts.slice(0,-1).join('; ')+'; and '+parts[parts.length-1] : parts.join(' and ');
+  return `${M} was ${am(Math.abs(gap))} ${dir} ${lbl}. The biggest contributors: ${list}.`; }
+function bridgeBox(){ const L=state.L; const br=bridge(L,P0(),state.cmp,state.treeSc); const lbl=cmpLabel();
+  if(!br) return `<div class="box"><h3>What explains the gap</h3><div class="empty">No ${esc(cmpWord())} figures for this period.</div></div>`;
+  const pts=[br.b]; let run=br.b; br.steps.forEach(s=>{ run+=s.v; pts.push(run); }); pts.push(br.a);
+  const lo=Math.min(0,...pts), hi=Math.max(...pts); const X=v=>((v-lo)/(hi-lo)*100);
+  // zoomed scale so the steps are visible: start the axis below the lowest running total
+  const lo2=Math.min(...pts)-(hi-Math.min(...pts))*0.9; const X2=v=>((v-lo2)/(hi-lo2)*100);
+  let rows=`<div class="bridge-row tot"><div class="lbl">${esc(state.treeSc?'Base':lbl)}</div><div class="bar-track"><div class="bar tot" style="left:0;width:${X2(br.b)}%"></div></div><div class="num">${num(br.b,1)}</div></div>`;
+  run=br.b; for(const s of br.steps){ const x0=X2(Math.min(run,run+s.v)), x1=X2(Math.max(run,run+s.v)); const open=state.bridgeOpen[s.k]; const has=Object.keys(s.by).length>1;
+    rows+=`<div class="bridge-row"><div class="lbl">${has?`<button data-bo="${s.k}" aria-label="Show split">${open?MINUS:'+'}</button>`:'<span class="nob"></span>'}${s.l}</div><div class="bar-track"><div class="bar ${s.v<0?'neg':'pos'}" style="left:${x0}%;width:${Math.max(.4,x1-x0)}%"></div></div><div class="num ${Math.abs(s.v)<0.05?'':s.v<0?'bad-t':'good-t'}">${s.v>=0?'+':MINUS}${num(Math.abs(s.v),1)}</div></div>`;
+    if(open&&has){ const top=Object.entries(s.by).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1])).slice(0,6); rows+=`<div class="sub-rows">${top.map(([p,v])=>`<div><span>${esc(ROW_L[p])}</span><span class="${v<0?'bad-t':'good-t'}">${v>=0?'+':MINUS}${num(Math.abs(v),1)}</span></div>`).join('')}</div>`; }
+    run+=s.v; }
+  rows+=`<div class="bridge-row tot"><div class="lbl">${state.treeSc?'Scenario':esc(perName(P0()))}</div><div class="bar-track"><div class="bar tot" style="left:0;width:${X2(br.a)}%"></div></div><div class="num">${num(br.a,1)}</div></div>`;
+  const sum=br.steps.reduce((x,s)=>x+s.v,0);
+  return `<div class="box"><div class="box-h"><div><h3>What explains the gap to ${esc(state.treeSc?'the base case':cmpWord())}</h3><div class="sub">${cap1(br.metric)}, ₹ Cr</div></div></div><p class="plain">${bridgeSummary(br,state.treeSc?'the base case':cmpWord())}</p>${rows}
+   <div class="check">+ shows the split by brand and channel. Lines add to ${sum>=0?'+':MINUS}${num(Math.abs(sum),1)}. Gap ${num(br.b,1)} to ${num(br.a,1)} is ${br.a-br.b>=0?'+':MINUS}${num(Math.abs(br.a-br.b),1)}.</div></div>`; }
+
+// ---------- alerts ----------
+function rowVals(P,ver){ return ROWS.map(r=>({r,a:vals({div:null,st:r.st,reg:r.reg},P,ver)})); }
+function alertsFor(){ const P=P0(); const S=vals({},P,'actual'), B=vals({},P,'budget'); const Y=vals({},shiftP(P,12),'actual'); const list=[]; const pn=perName(P);
+  const RV=rowVals(P,'actual'); const RY=Y? rowVals(shiftP(P,12),'actual'):null;
+  const deep=RV.filter(x=>x.a.real<.62).sort((a,b)=>a.a.real-b.a.real);
+  if(deep.length) list.push({id:'A1',rule:'Share of tag price kept below 62%',title:`${ROW_L[deep[0].r.id]} keeps ${num(deep[0].a.real*100,1)}% of list price`+(deep.length>1?`, and ${deep.length-1} more`:''),owner:'Merchandising',status:'open',imp:-deep.reduce((a,x)=>a+x.a.owed*(.64-x.a.real),0),impL:'vs a 64% norm',
+    what:`${deep.length} brand and channel combinations kept less than 62% of list price in ${pn}.`,why:deep.slice(0,5).map(x=>({node:'real',lens:{st:x.r.st,reg:x.r.reg},l:`${ROW_L[x.r.id]}: share of tag price kept`,dt:`${num(x.a.real*100,1)}%`})),so:'Each point of share of tag price kept across AFL is worth about '+am(S.owed*.01,0)+' in '+pn+' (Aistra estimate).'});
+  const hc=RV.filter(x=>x.a.commRate>.2).sort((a,b)=>b.a.commRate-a.a.commRate);
+  if(hc.length) list.push({id:'A2',rule:'Commission above 20% of revenue',title:`${ROW_L[hc[0].r.id]} at ${num(hc[0].a.commRate*100,1)}%`+(hc.length>1?`, and ${hc.length-1} more`:''),owner:'Channel heads',status:'open',imp:-hc.reduce((a,x)=>a+x.a.rev*(x.a.commRate-.2),0),impL:'above a 20% cap',
+    what:`${hc.length} brand and channel combinations paid more than 20% of revenue in commissions in ${pn}.`,why:hc.slice(0,5).map(x=>({node:'commRate',lens:{st:x.r.st,reg:x.r.reg},l:`${ROW_L[x.r.id]}: commission rate`,dt:`${num(x.a.commRate*100,1)}%`})),so:'Commission slabs tied to store and platform productivity are the lever.'});
+  if(RY){ const up=RV.map((x,i)=>({...x,y:RY[i].a})).filter(x=>x.a.consPS>x.y.consPS*1.06).sort((a,b)=>(b.a.consPS/b.y.consPS)-(a.a.consPS/a.y.consPS));
+    if(up.length) list.push({id:'A3',rule:'Cost to buy each piece up more than 6%',title:`${ROW_L[up[0].r.id]}: +${num((up[0].a.consPS/up[0].y.consPS-1)*100,1)}% on last year`+(up.length>1?`, and ${up.length-1} more`:''),owner:'Sourcing',status:'ack',imp:-up.reduce((a,x)=>a+(x.a.consPS-x.y.consPS*1.03)*x.a.samples,0),impL:'vs 3% inflation',
+      what:`Cost to buy each piece rose more than 6% in ${up.length} brand and channel combinations.`,why:up.slice(0,5).map(x=>({node:'consPS',lens:{st:x.r.st,reg:x.r.reg},l:`${ROW_L[x.r.id]}: cost to buy each piece`,dt:`${ad(x.a.consPS,0)} vs ${ad(x.y.consPS,0)}`})),so:'Supplier consolidation and fabric pooling across brands are the usual levers.'}); }
+  if(B&&S.ebitdaM<B.ebitdaM-.003) list.push({id:'A4',rule:'EBITDA margin below plan',title:`EBITDA margin ${num(S.ebitdaM*100,1)}% vs ${num(B.ebitdaM*100,1)}% in plan`,owner:'CFO',status:'ack',imp:-(B.ebitdaM-S.ebitdaM)*S.rev,impL:'EBITDA vs plan',
+    what:`EBITDA margin was ${num((B.ebitdaM-S.ebitdaM)*100,1)} points below the illustrative plan (13% growth, 1.5% cost efficiency) in ${pn}.`,why:[{node:'ebitda',l:'EBITDA',dt:`${am(S.ebitda)} vs ${am(B.ebitda)}`},{node:'comm',l:'Channel commissions',dt:am(S.comm)}],so:'The plan is illustrative; AFL’s own budget would replace it.'});
+  if(S.dso>0 && S.netDebt>D.co.actual[17].netDebt) list.push({id:'A5',rule:'Net debt up on March',title:`Net debt ${am(S.netDebt)} vs ${am(D.co.actual[17].netDebt)} at March 2026`,owner:'CFO',status:'open',imp:-(S.netDebt-D.co.actual[17].netDebt),impL:'cash',
+    what:'Net debt rose in the half as net working capital grew to ₹1,088 Cr and inventory days reached 108.',why:[{node:'wcChg',l:'Working capital',dt:am(S.wcChg)},{node:'owc',l:'Inventory and other',dt:am(S.owc)}],so:'Inventory days are the main cash lever.'});
+  for(const c of STORE.alerts){ const m=N[c.m]; if(!m) continue; const lim= m.u==='pct'? c.val/100 : c.val; const hit=v=> v!=null && (c.cond==='below'? v<lim : v>lim);
+    if(c.scope==='company'){ const v=m.v(S); if(hit(v)) list.push({id:c.id,rule:c.name,title:`${m.l} ${fvs(m.u,v)}; limit ${c.cond==='below'?'at least':'at most'} ${fvs(m.u,lim)}`,owner:c.owner||'Not set',status:'open',custom:true,impTxt:fvs(m.u,v),impL:pn,what:`${m.l} for the Group is ${fvs(m.u,v)} in ${pn}, against a limit of ${fvs(m.u,lim)}.`,why:[{node:c.m,l:m.l,dt:fvs(m.u,v)}],so:'Rule added by a user.'}); }
+    else { const hits=RV.map(x=>({x,v:m.v(x.a)})).filter(o=>hit(o.v)).sort((a,b)=>c.cond==='below'?a.v-b.v:b.v-a.v);
+      if(hits.length) list.push({id:c.id,rule:c.name,title:`${hits.length} outside the limit: ${hits.slice(0,2).map(o=>`${ROW_L[o.x.r.id]} ${fvs(m.u,o.v)}`).join('; ')}`,owner:c.owner||'Not set',status:'open',custom:true,impTxt:`${hits.length} flagged`,impL:'brand and channel',what:`${m.l} is ${c.cond==='below'?'below':'above'} ${fvs(m.u,lim)} in ${hits.length} brand and channel combination${hits.length>1?'s':''} in ${pn}.`,why:hits.slice(0,6).map(o=>({node:c.m,lens:{st:o.x.r.st,reg:o.x.r.reg},l:`${ROW_L[o.x.r.id]}: ${m.l}`,dt:fvs(m.u,o.v)})),so:'Rule added by a user.'}); } }
+  return list; }
+function stTag(a){ return a.status==='open'?'<span class="tag open">Open</span>':a.status==='esc'?'<span class="tag open">Escalated</span>':a.status==='ack'?'<span class="tag ack">Acknowledged</span>':'<span class="tag closed">Closed</span>'; }
+function impHTML(a){ if(a.custom) return `<div class="imp"><b style="color:var(--bad)">${esc(a.impTxt)}</b><span>${esc(a.impL)}</span></div>`; if(a.closed) return `<div class="imp"><b style="color:var(--good)">Resolved</b><span>&nbsp;</span></div>`;
+  return `<div class="imp"><b style="color:var(--bad)">${a.cash?'':(a.imp<0?MINUS:'')}${am(Math.abs(a.imp))}</b><span>${esc(a.impL)}</span></div>`; }
+
+// ---------- drawer ----------
+function trendSVG(meta){ const pts=[], bud=[]; const e=P0().e; const t0=Math.max(0,e-11);
+  for(let i=t0;i<=e;i++){ const A=vals(state.L,{s:i,e:i},'actual'), B=vals(state.L,{s:i,e:i},'budget'); pts.push(A&&(meta.g==='row'||A.valid.co)?meta.v(A):null); bud.push(B&&(meta.g==='row'||B.valid.co)?meta.v(B):null); }
+  const all=[...pts,...bud].filter(v=>v!=null&&isFinite(v)); if(all.length<2) return '';
+  const mn=Math.min(...all), mx=Math.max(...all), r=(mx-mn)||1, w=420, h=120, n=pts.length;
+  const P=arr=>arr.map((v,i)=>v==null?null:`${(i/(n-1)*(w-20)+10).toFixed(1)},${(h-14-(v-mn)/r*(h-34)).toFixed(1)}`).filter(Boolean).join(' ');
+  const labs=[t0,e].map((i,j)=>`<text x="${j?w-10:10}" y="${h+2}" font-size="11" fill="var(--mute)" text-anchor="${j?'end':'start'}">${MONTHS[i].label}</text>`).join('');
+  const hasB=bud.some(v=>v!=null);
+  return `<svg viewBox="0 0 ${w} ${h+6}" style="width:100%;height:auto">${hasB?`<polyline points="${P(bud)}" fill="none" stroke="var(--mute)" stroke-dasharray="4 4" stroke-width="1.4"/>`:''}<polyline points="${P(pts)}" fill="none" stroke="var(--accent)" stroke-width="2.2"/>${labs}<line x1="${w-170}" y1="8" x2="${w-150}" y2="8" stroke="var(--accent)" stroke-width="2.2"/><text x="${w-145}" y="12" font-size="11" fill="var(--mute)">Actual</text>${hasB?`<line x1="${w-90}" y1="8" x2="${w-70}" y2="8" stroke="var(--mute)" stroke-dasharray="4 4" stroke-width="1.4"/><text x="${w-65}" y="12" font-size="11" fill="var(--mute)">Plan</text>`:''}</svg>`; }
+function splitDims(meta){ if(meta.g==='row') return [['st','Brand'],['reg','Channel'],['div','Brand group']]; return []; }
+function dimValues(dim){ const L=state.L; if(dim==='st') return STREAMS.filter(s=>(!L.div||s.d===L.div)&&(!L.st||s.k===L.st)).map(s=>[s.k,s.l]); if(dim==='reg') return REGIONS.filter(r=>!L.reg||r.k===L.reg).map(r=>[r.k,RG_S[r.k]]); return DIVS.filter(d=>!L.div||d.k===L.div).map(d=>[d.k,d.l]); }
+let splitDim='st';
+function openNode(id){ state.sel=id; const meta=nd(id); const S=curS(), C=cmpS(); const lv=S.valid;
+  const valid= meta.g==='row'||lv.co;
+  const grainTxt= meta.g==='row'? 'By brand and channel' : 'Company level';
+  $('#dTitle').innerHTML=`<h3>${esc(meta.l)}</h3><div class="tags"><span class="tag rev">${grainTxt}</span><span class="tag">${esc(perName(P0()))}</span>${lensText()?`<span class="tag">${esc(lensText())}</span>`:''}</div>`;
+  let h='';
+  if(!valid){ h+=`<p class="read">Held for the Group only, so there is no figure for <b>${esc(lensText())}</b>.</p>`; }
+  else { const a=meta.v(S), b=C?meta.v(C):null; const dl=delta(meta.u,a,b,meta.dir);
+    h+=`<div class="bigv">${fvs(meta.u,a)}</div><div class="cmpline">${esc(cmpLabel())} ${b!=null?fvs(meta.u,b):'not available'} ${dl.txt?`<span class="dchip ${dl.cls}">${dl.txt}</span>`:''}${dl.pc&&meta.u!=='pct'?`<span class="dchip ${dl.cls}">${dl.pc}</span>`:''}</div>`;
+    h+=`<div class="read" style="margin-top:12px">${readFor(id,meta,S,C)}</div>`; }
+  h+=`<dl class="dl"><dt>Formula</dt><dd>${esc(meta.f)}</dd><dt>Owner</dt><dd>${esc(meta.o)}</dd><dt>Source</dt><dd>${esc(meta.s)}</dd></dl>`;
+  if(valid){ h+=`<div class="h4">Last 12 months, by month</div>${trendSVG(meta)}`; }
+  const dims=splitDims(meta);
+  if(valid && dims.length){ if(!dims.find(d=>d[0]===splitDim)) splitDim=dims[0][0];
+    const vs=dimValues(splitDim); const additive=['m','ks','hc'].includes(meta.u);
+    let rows=vs.map(([k,l])=>{ const L2={...state.L,[splitDim]:k}; if(splitDim==='st') L2.div=STREAM_BY[k].d; if(splitDim==='div'&&L2.st&&STREAM_BY[L2.st].d!==k) return null;
+      const a=vals(L2,P0(),'actual',state.treeSc); if(!a||a.rev<1e-6) return null; const b=state.treeSc? vals(L2,P0(),'actual') : cmpOf(L2,P0()); const av=meta.v(a), bv=b?meta.v(b):null; const dl=delta(meta.u,av,bv,meta.dir); return {k,l,av,bv,dl}; }).filter(Boolean);
+    rows.sort((x,y)=> additive? Math.abs(y.av)-Math.abs(x.av) : y.av-x.av);
+    h+=`<div class="h4">Split</div><div class="splits">${dims.map(([k,l])=>`<button data-sd="${k}" class="${k===splitDim?'on':''}">${l}</button>`).join('')}</div>
+     <div class="tw"><table class="t"><thead><tr><th>${dims.find(d=>d[0]===splitDim)[1]}</th><th>Actual</th><th>${esc(cmpLabel())}</th><th>Change</th></tr></thead><tbody>${rows.map(r=>`<tr class="click" data-lk="${r.k}"><td>${esc(r.l)}</td><td>${fvt(meta.u,r.av)}</td><td>${r.bv!=null?fvt(meta.u,r.bv):'–'}</td><td><span class="dchip ${r.dl.cls}">${chip(meta.u,r.dl)||'–'}</span></td></tr>`).join('')}
+     ${additive?`<tr class="total"><td>Total</td><td>${fvt(meta.u,meta.v(S))}</td><td>${C?fvt(meta.u,meta.v(C)):'–'}</td><td></td></tr>`:''}</tbody></table></div><div class="hint">Click a row to filter the tree.</div>`; }
+  $('#dBody').innerHTML=h; $('#drawer').classList.add('open'); $('#scrim').classList.add('on');
+  $('#dBody').querySelectorAll('[data-sd]').forEach(b=>b.onclick=()=>{ splitDim=b.dataset.sd; openNode(id); });
+  $('#dBody').querySelectorAll('[data-lk]').forEach(tr=>tr.onclick=()=>{ const k=tr.dataset.lk; state.L[splitDim]=k; if(splitDim==='st') state.L.div=STREAM_BY[k].d; closeDrawer(); state.view='tree'; renderAll(); });
+  document.querySelectorAll('.node.picked').forEach(n=>n.classList.remove('picked')); document.querySelectorAll(`.node[data-node="${id}"]`).forEach(n=>n.classList.add('picked')); }
+function closeDrawer(){ $('#drawer').classList.remove('open'); $('#scrim').classList.remove('on'); state.sel=null; document.querySelectorAll('.node.picked').forEach(n=>n.classList.remove('picked')); }
+function readFor(id,meta,S,C){ if(!C) return 'No comparison figures for this period.';
+  const a=meta.v(S), b=meta.v(C); const dl=delta(meta.u,a,b,meta.dir); const word= dl.cls==='flat'? 'In line with' : (dl.cls==='good'?'Better than':'Worse than');
+  let s=`<b>${word} ${esc(cmpWord())}</b>: ${fvs(meta.u,a)} against ${fvs(meta.u,b)}${meta.u==='pct'&&Math.abs(a-b)>=0.0005?`, ${num(Math.abs(a-b)*100,1)} percentage points ${a>b?'higher':'lower'}`:''}. `;
+  if(['ebit','pat','segEbitda'].includes(id)){ const br=bridge(state.L,P0(),state.cmp,state.treeSc); if(br){ s+=bridgeSummary(br,cmpWord()).replace(/^[^.]*\. /,''); if(id==='pat'&&S.valid.co) s+=` Net interest moved by ${am(S.fin-C.fin)} and tax by ${am(S.tax-C.tax)}.`; } return s; }
+  const dims=splitDims(meta); if(!dims.length) return s+'Group-level figure, so there is no split below it.';
+  const by=ROWS.filter(r=>rowMatch(r,state.L)).map(r=>({l:ROW_L[r.id],L2:{div:null,st:r.st,reg:r.reg}}));
+  if(by.length<2) return s+'One brand and channel is selected, so there is nothing further to split.';
+  const parts=by.map(o=>{ const x=vals(o.L2,P0(),'actual',state.treeSc), y=state.treeSc?vals(o.L2,P0(),'actual'):cmpOf(o.L2,P0()); if(!x||!y) return null; return {l:o.l,d:meta.v(x)-meta.v(y),a:meta.v(x)}; }).filter(Boolean);
+  if(['m','ks','hc'].includes(meta.u)){ parts.sort((x,y)=>(x.d*meta.dir)-(y.d*meta.dir)); const worst=parts.slice(0,3).filter(x=>x.d*meta.dir<0);
+    if(worst.length) s+=`Furthest behind: ${worst.map(x=>`${x.l} (${x.d>=0?'+':MINUS}${num(Math.abs(x.d),meta.u==='m'?1:0)})`).join(', ')}.`; else s+='No brand and channel is behind.'; }
+  else { parts.sort((x,y)=>(x.a*meta.dir)-(y.a*meta.dir)); s+=`Weakest: ${parts.slice(0,3).map(x=>`${x.l} (${fvt(meta.u,x.a)})`).join(', ')}.`; }
+  return s; }
+
+// ---------- value tree page ----------
+function story(){ const P=P0(), pn=perName(P); const L=state.L; const lv=lensLevel(L); const S=vals(L,P,'actual'); const C=cmpOf(L,P); const lbl=cmpWord(); let h,k='';
+  if(lv.co){ h=`Arvind Fashions made ${am(S.ebitda)} of EBITDA on ${am(S.rev)} of revenue in ${pn}, a ${num(S.ebitdaM*100,1)}% margin, with gross margin at ${num(S.grossM*100,1)}%.`;
+    if(C){ const dE=S.ebitda-C.ebitda; k=`Against ${lbl}, EBITDA is ${am(Math.abs(dE))} ${dE>=0?'higher':'lower'}. Channel commissions took ${num(S.commRate*100,1)}% of revenue.`; } }
+  else { const nm=lensText(); const dE=C? S.segEbitda-C.segEbitda:null; h=`${nm}: an estimated ${am(S.segEbitda)} of brand EBITDA in ${pn}, a ${num(S.segEbitdaM*100,1)}% margin.`; if(C) k=`${am(Math.abs(dE))} ${dE>=0?'more':'less'} than ${lbl}. Brand and channel figures are estimates; AFL does not report them.`; }
+  return {h,k}; }
+function viewTree(){ const tab=TABS[state.tab];
+  const st=story(); let h=`<h2 class="headline">${st.h}</h2>${st.k?`<p class="takeaway">${st.k}</p>`:''}`;
+  h+=`<div class="lens-note">Company totals tie to AFL’s reported results (latest: H1 FY27, to September 2026). Splits by brand, channel and month are our estimates until AFL’s own data is connected.</div>`;
+  h+=lensNote();
+  if(state.treeSc) h+=`<div class="lens-note sc">Scenario: <b>${esc(state.presetName||'New scenario')}</b>, compared with actual. <button id="clrSc">Back to actuals</button></div>`;
+  if(state.cmp==='budget'&&!state.treeSc) h+=`<div class="lens-note">Plan figures are illustrative, set for the demo. AFL’s own budget would replace them.</div>`;
+  h+=renderKPIs();
+  h+=`<div class="tabrow"><div class="tabs">${Object.entries(TABS).map(([k,t])=>`<button data-tab="${k}" class="${state.tab===k?'on':''}">${t.l}</button>`).join('')}</div>
+   <div class="legend"><span><i style="background:var(--good)"></i>Better</span><span><i style="background:var(--bad)"></i>Worse</span><span><i class="lg-off"></i>Company only</span></div></div>`;
+  h+= state.tab==='inv'? invTable() : `<div class="panels">${tab.trees.map(treePanel).join('')}</div>`;
+  if(state.tab==='pat'){ const al=alertsFor().filter(a=>!a.closed).slice(0,5);
+    h+=`<div class="lower">${bridgeBox()}<div class="box"><div class="box-h"><div><h3>Things that need attention</h3><div class="sub">${esc(perName(P0()))}. Brand and channel figures are illustrative.</div></div><button class="btn" id="allAl">All alerts</button></div>${al.map(a=>`<div class="alert-li" data-al="${a.id}" role="button" tabindex="0"><span class="dot ${a.status==='ack'?'amber':''}"></span><div><div class="tt">${esc(a.title)}</div><div class="tags"><span class="tag">${a.id}</span>${stTag(a)}</div></div>${impHTML(a)}</div>`).join('')||'<div class="empty">Nothing outside the rules this period.</div>'}</div></div>`; }
+  return h; }
+
+const REPORTED=[
+ ['Revenue','₹2,837 Cr in H1 FY27 (+12.4%); ₹5,266 Cr in FY26 (+14%)','Fact sheet; annual report 2026'],
+ ['Gross margin','55.1% H1 FY27; 54.4% FY26 (+91 bps)','Fact sheet; annual report 2026'],
+ ['EBITDA excluding other income','₹376 Cr, 13.2% in H1 FY27; ₹705 Cr, 13.4% in FY26','Fact sheet; annual report 2026'],
+ ['Pre-Ind AS EBITDA','9.2% of revenue in Q2 FY27 (8.6% Q2 FY26)','Results presentation'],
+ ['Biggest other costs, FY26','Commission ₹687 Cr; outsourced services ₹274 Cr; royalty ₹222 Cr; advertising ₹213 Cr; freight ₹84 Cr; warehousing ₹47 Cr','Annual report 2026, note 23'],
+ ['Channel mix, Q2 FY27','Retail 40%, online B2C 13%, wholesale 33%, online B2B and others 14%','Results presentation'],
+ ['Stores and space','1,044 AFL-run stores at September 2026; 13.37 lakh sq. ft. of store space at March 2026','Results presentation; annual report'],
+ ['Cash tied up in trading, September 2026','Stock equal to 108 days of sales; customers take 49 days to pay; AFL takes 92 days to pay suppliers','Results presentation'],
+ ['Net debt','₹583 Cr at September 2026 (₹467 Cr at March 2026)','Balance sheet'],
+ ['FY27 aims','12-15% revenue growth; ~150 gross store openings; AI for cost efficiency','Results presentation'],
+];
+function invTable(){ return `<div class="box"><div class="box-h"><div><h3>What AFL reports</h3><div class="sub">Consolidated, Ind AS. Latest: H1 FY27, to September 2026.</div></div></div><div class="tw"><table class="t rep"><thead><tr><th></th><th>Figure</th><th>Source</th></tr></thead><tbody>${REPORTED.map(r=>`<tr><td>${r[0]}</td><td><b>${r[1]}</b></td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div></div>`; }
+function bindTreeView(){ const p=$('#page'); bindTree(p);
+  p.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{ state.tab=b.dataset.tab; renderPage(); });
+  p.querySelectorAll('[data-bo]').forEach(b=>b.onclick=()=>{ state.bridgeOpen[b.dataset.bo]=!state.bridgeOpen[b.dataset.bo]; renderPage(); });
+  p.querySelectorAll('[data-al]').forEach(b=>{ b.onclick=()=>{ state.alertSel=b.dataset.al; state.view='al'; renderAll(); window.scrollTo(0,0); }; b.onkeydown=e=>{ if(e.key==='Enter') b.click(); }; });
+  const aa=$('#allAl'); if(aa) aa.onclick=()=>{ state.view='al'; renderAll(); };
+  const cl=$('#clrLens'); if(cl) cl.onclick=()=>{ state.L=EMPTY_L(); renderAll(); };
+  const cs=$('#clrSc'); if(cs) cs.onclick=()=>{ state.treeSc=null; renderAll(); };
+  const c2=$('#clrLens2'); if(c2) c2.onclick=()=>{ state.L=EMPTY_L(); renderAll(); };
+  TABS[state.tab].trees.forEach(applyZoom); }
+
+// ---------- scenarios ----------
+// every leaf in both trees is a lever. type: pct (relative change), pts (absolute, in rate units), days, amt (₹ Cr over the period)
+const LEVERS=[
+ {g:'Revenue',k:'vol',node:'existing',l:'Like-for-like volume',type:'pct',min:-.1,max:.1,step:.005,fav:1},
+ {g:'Revenue',k:'won',node:'won',l:'Volume from new doors',type:'ptsS',min:-.03,max:.05,step:.0025,fav:1},
+ {g:'Revenue',k:'price',node:'price',l:'List price per piece',type:'pct',min:-.05,max:.06,step:.0025,fav:1},
+ {g:'Revenue',k:'real',node:'real',l:'Share of tag price kept (fewer discounts)',type:'pts',min:-.03,max:.03,step:.0025,fav:1},
+ {g:'Product and channels',k:'consPS',node:'consPS',l:'Cost to buy each piece',type:'pct',min:-.1,max:.1,step:.005,fav:-1},
+ {g:'Product and channels',k:'commRate',node:'commRate',l:'Channel commission rate',type:'pct',min:-.15,max:.1,step:.01,fav:-1},
+ {g:'Product and channels',k:'corpPct',node:'corpPct',l:'Royalty and ad spend share',type:'pts',min:-.02,max:.02,step:.001,fav:-1},
+ {g:'Stores and logistics',k:'sites',node:'sites',l:'Number of stores',type:'pct',min:-.1,max:.15,step:.01,fav:-1},
+ {g:'Stores and logistics',k:'costSite',node:'costSite',l:'Running cost per store',type:'pct',min:-.15,max:.1,step:.01,fav:-1},
+ {g:'Stores and logistics',k:'leaseSite',node:'leases',l:'Lease rent',type:'pct',min:-.15,max:.1,step:.01,fav:-1},
+ {g:'Stores and logistics',k:'prod',node:'prod',l:'Pieces per service person',type:'pct',min:-.1,max:.15,step:.005,fav:1},
+ {g:'Stores and logistics',k:'cphL',node:'cphL',l:'Cost per service person',type:'pct',min:-.1,max:.1,step:.005,fav:-1},
+ {g:'People',k:'supProd',node:'supProd',l:'Pieces per employee',type:'pct',min:-.1,max:.2,step:.01,fav:1},
+ {g:'People',k:'cphS',node:'cphS',l:'Cost per employee',type:'pct',min:-.1,max:.1,step:.01,fav:-1},
+ {g:'Assets and capex',k:'assets',node:'assets',l:'Fixed and lease assets',type:'pct',min:-.1,max:.1,step:.01,fav:-1},
+ {g:'Assets and capex',k:'daRate',node:'daRate',l:'Depreciation rate',type:'pts',min:-.02,max:.02,step:.001,fav:-1},
+ {g:'Assets and capex',k:'base',node:'capBase',l:'Capex',type:'pct',min:-.5,max:.5,step:.05,fav:-1},
+ {g:'Working capital',k:'dsoChg',node:'dso',l:'Days to get paid',type:'days',min:-15,max:10,step:1,fav:-1},
+ {g:'Working capital',k:'dpo',node:'dpo',l:'Days to pay suppliers',type:'days',min:-10,max:15,step:1,fav:1},
+ {g:'Working capital',k:'owc',node:'owc',l:'Inventory and other',type:'amt',min:-200,max:200,step:10,fav:-1},
+ {g:'Finance and tax',k:'rate',node:'rate',l:'Net cost of funds',type:'pts',min:-.03,max:.03,step:.0025,fav:-1},
+ {g:'Finance and tax',k:'tax',node:'etr',l:'Tax rate',type:'pts',min:-.03,max:.03,step:.0025,fav:-1},
+ {g:'Finance and tax',k:'nci',node:'nciShare',l:'Partners’ share of profit',type:'pts',min:-.05,max:.05,step:.005,fav:-1},
+ {g:'Finance and tax',k:'fxo',node:'other',l:'Other cash items',type:'amt',min:-100,max:100,step:10,fav:1},
+];
+
+const PLAIN={
+ vol:{l:'Pieces sold in existing stores',v:.01,move:'1% more pieces sold',what:'How many pieces AFL sells through the stores, websites and partners it already has.',why:'More pieces means more revenue. Product cost, commissions and royalty rise with every sale, so only part of the extra revenue turns into profit.'},
+ won:{l:'Pieces sold through new stores',v:.01,move:'New stores add 1% more pieces',what:'Sales from stores and listings opened in the period.',why:'Works like extra volume: more revenue, part of which is used up by product cost, commissions and royalty.'},
+ price:{l:'Tag price per piece',v:.01,move:'Tag prices 1% higher',what:'The price on the tag before any discount.',why:'Each piece earns more but costs the same to buy. Most of the extra revenue becomes profit; only commissions and royalty, which are a share of sales, take a cut.'},
+ real:{l:'Share of the tag price AFL keeps',v:.01,move:'₹1 more kept per ₹100 of tag price',what:'What AFL actually collects after discounts, sale prices and the margin wholesale partners keep.',why:'Smaller discounts bring in more money for the same pieces, at no extra cost, so almost all of it becomes profit.'},
+ consPS:{l:'Cost to buy each piece',v:-.01,move:'Each piece costs 1% less to buy',what:'What AFL pays its suppliers for a finished piece, plus import duty and freight to its warehouse (the buying cost).',why:'Product cost is AFL’s largest cost, so even 1% cheaper buying adds directly to profit, rupee for rupee.'},
+ commRate:{l:'Commission to channel partners',v:-.01,move:'Commission rate 1% lower',what:'The share of each sale paid to franchise store owners, online marketplaces and distributors.',why:'Partners take a smaller cut of the same sales, so AFL keeps more of each rupee.'},
+ corpPct:{l:'Royalty and advertising',v:-.001,move:'0.1% of sales less spent',what:'Fees paid to the owners of licensed brands, plus advertising.',why:'Less spent for the same sales adds directly to profit. Royalty is fixed by licence terms, so in practice only advertising can move.'},
+ sites:{l:'Number of AFL stores',v:-.01,move:'1% fewer stores, carrying the same sales',what:'Stores AFL runs itself (exclusive brand outlets).',why:'Fewer stores for the same sales lowers store running costs.'},
+ costSite:{l:'Running cost per store',v:-.01,move:'Each store costs 1% less to run',what:'Upkeep, power, short-term rent and other store costs, per store.',why:'A direct cost saving, so profit rises rupee for rupee.'},
+ leaseSite:{l:'Rent on long store leases',v:-.01,move:'Store rent 1% lower',what:'Rent on multi-year store leases. Indian accounting rules book this as depreciation and interest rather than as rent.',why:'In this model rent is a cash payment, so lower rent lowers debt. Reported profit stays as reported because the lease cost sits in depreciation and interest.'},
+ prod:{l:'Pieces handled per service worker',v:.01,move:'Each worker handles 1% more pieces',what:'Productivity of outsourced store and warehouse staff.',why:'The same sales need fewer paid hours, so service costs fall.'},
+ cphL:{l:'Cost per service worker',v:-.01,move:'1% lower cost per worker',what:'What AFL pays per outsourced store or warehouse worker.',why:'A direct cost saving.'},
+ supProd:{l:'Pieces sold per employee',v:.01,move:'Employees support 1% more sales each',what:'Productivity of AFL’s own employees, including head office.',why:'The same sales need fewer people, so employee cost falls.'},
+ cphS:{l:'Cost per employee',v:-.01,move:'1% lower cost per employee',what:'Average pay and benefits per AFL employee.',why:'A direct cost saving.'},
+ assets:{l:'Fixed assets and store leases',v:-.01,move:'1% less in fixed assets and leases',what:'Store fit-outs, systems and the value of store leases on the balance sheet.',why:'Fewer assets means a lower depreciation charge. Depreciation is not a cash payment, so debt falls only by the tax saved.'},
+ daRate:{l:'Depreciation rate',v:-.001,move:'Depreciation rate 0.1 point lower',what:'How fast assets are written off each year.',why:'A lower charge raises reported profit; cash is unchanged except for tax.'},
+ base:{l:'Capital spending',v:-.1,move:'10% less spent on stores and systems',what:'Money spent on new stores, fit-outs and systems.',why:'Profit in the period does not change, but cash is saved, so debt is lower.'},
+ dsoChg:{l:'Days customers take to pay',v:-1,move:'Customers pay 1 day sooner',what:'Mainly wholesale partners and marketplaces, which pay AFL on credit.',why:'Profit does not change. Cash arrives earlier, so less borrowing is needed.'},
+ dpo:{l:'Days AFL takes to pay suppliers',v:1,move:'AFL pays suppliers 1 day later',what:'How long AFL takes to pay for the goods it buys.',why:'Profit does not change. AFL holds the cash longer, so less borrowing is needed.'},
+ owc:{l:'Cash tied up in stock',v:-10,move:'₹10 Cr less held as stock',what:'Money sitting in unsold clothes in stores and warehouses.',why:'Profit does not change. Every rupee of stock not bought or held is a rupee not borrowed.'},
+ rate:{l:'Interest rate on borrowings and leases',v:-.001,move:'Rate 0.1 point lower',what:'The net cost of AFL’s loans and lease liabilities.',why:'Lower interest raises profit after interest.'},
+ tax:{l:'Tax rate',v:-.005,move:'Tax rate 0.5 point lower',what:'Tax as a share of profit before tax.',why:'Less tax on the same profit.'},
+ nci:{l:'Partners’ share of profit',v:-.01,move:'Partners’ share 1 point lower',what:'Part of AFL’s profit belongs to minority partners in some of its subsidiaries.',why:'More of the same profit belongs to AFL shareholders. Company cash does not change.'},
+ fxo:{l:'Other cash items',v:10,move:'₹10 Cr more cash from other items',what:'Timing of payments and other cash items not shown elsewhere.',why:'Changes cash only.'},
+};
+for(const l of LEVERS){ const p=PLAIN[l.k]; if(p){ l.l=p.l; l.what=p.what; l.why=p.why; l.move=p.move; l.test=p.v; } }
+const LGROUPS=[...new Set(LEVERS.map(l=>l.g))];
+const ZERO_SC=()=>Object.fromEntries(LEVERS.map(l=>[l.k,0]));
+const LB=()=>vals({},P0(),'actual');
+function levText(l,v){ if(!v) return 'No change'; const sg=v>0?'+':MINUS, a=Math.abs(v);
+  if(l.type==='pct') return `${sg}${num(a*100,1)}%`; if(l.type==='pts'||l.type==='ptsS') return `${sg}${num(a*100,2)} pts`; if(l.type==='days') return `${sg}${num(a,0)} days`; return `${sg}₹${num(a,0)} Cr`; }
+function levNow(l){ const m=N[l.node]; const S=LB(); if(!S||(m.g==='co'&&!S.valid.co)) return ''; return fvs(m.u,m.v(S)); }
+function scFrom(o){ const s={}; for(const [k,v] of Object.entries(o)){ if(!v) continue; if(k==='dsoChg') s.dso=-v; else s[k]=v; } return Object.keys(s).length? s:null; }
+function scObj(){ return scFrom(state.sc); }
+const PRESETS=[
+ {k:'p1',l:'Pay less in commissions',d:'Commission rate 5% lower, for example by paying partners a lower rate as their sales grow.',sc:{commRate:-.05}},
+ {k:'p2',l:'Buy for less',d:'Each piece costs 2% less to buy, for example by using fewer suppliers with bigger orders.',sc:{consPS:-.02}},
+ {k:'p3',l:'Discount less',d:'AFL keeps ₹1 more of every ₹100 of tag price.',sc:{real:.01}},
+ {k:'p4',l:'Cheaper stores',d:'Store running costs and store rent both 5% lower.',sc:{costSite:-.05,leaseSite:-.05}},
+ {k:'p5',l:'Hold less stock',d:'₹150 Cr less money tied up in unsold clothes.',sc:{owc:-150}},
+ {k:'p6',l:'First four together',d:'Commissions, buying, discounts and stores together.',sc:{commRate:-.05,consPS:-.02,real:.01,costSite:-.05,leaseSite:-.05}}];
+// value of a 1% improvement in each lever (relative to its current level)
+function levImpacts(P){ const B=vals({},P,'actual'); return LEVERS.map(l=>{ const v=l.test!=null? l.test : .01*l.fav;
+    const o={}; o[l.k]=v; const X=vals({},P,'actual',scFrom(o)); return {l,v,dPat:X.pat-B.pat,dNd:X.netDebt-B.netDebt,dEbit:X.ebit-B.ebit}; }); }
+function viewSc(){ const sc=scObj(); const P=P0(); const B=vals({},P,'actual'), X=vals({},P,'actual',sc)||B;
+  const card=(l,a,b,u,dir,extra)=>{ const dl=delta(u,a,b,dir); return `<div class="res"><div class="t">${l}</div><div class="v">${fvs(u,a)}</div><div class="d ${dl.cls}-t">${sc?(dl.txt||'No change')+' vs actual':'Actual '+fvs(u,b)}</div>${extra?`<div class="x">${extra}</div>`:''}</div>`; };
+  const rows=[['rev','Revenue'],['grossM','Gross margin'],['comm','Channel commissions'],['segEbitda','Brand EBITDA'],['ebitda','EBITDA'],['ebitdaM','EBITDA margin'],['pat','Net profit to AFL'],['fcfg','Cash from trading'],['netDebt','Net debt at period end']];
+  const preset=PRESETS.find(p=>p.k===state.preset); const saved=STORE.scen.find(s=>s.id===state.preset);
+  const title= preset? preset.l : saved? saved.name : 'New scenario';
+  const lib=PRESETS.map(p=>{ const Z=vals({},P,'actual',scFrom(p.sc)); const d=Z.pat-B.pat; const dc=-(Z.netDebt-B.netDebt); const useCash=Math.abs(d)<0.5; return `<button class="preset ${state.preset===p.k?'on':''}" data-ps="${p.k}"><span class="rd"></span><b>${p.l}</b><span>${p.d}</span><em class="${(useCash?dc:d)>=0?'good-t':'bad-t'}">${(useCash?dc:d)>=0?'+':MINUS}${am(Math.abs(useCash?dc:d),1)} ${useCash?'lower net debt':'net profit'}</em></button>`; }).join('')
+   + STORE.scen.map(s=>`<div class="preset ${state.preset===s.id?'on':''}" data-ps="${s.id}" role="button" tabindex="0"><span class="rd"></span><b>${esc(s.name)}</b><span>${esc(scDesc(s.sc))}</span><em>Saved ${esc(s.date)} <button class="del" data-delsc="${s.id}" aria-label="Delete ${esc(s.name)}">Delete</button></em></div>`).join('');
+  const canSave= sc && !preset && !saved; const moved=LEVERS.filter(l=>state.sc[l.k]).length;
+  const groups=LGROUPS.map(g=>{ const ls=LEVERS.filter(l=>l.g===g); const n=ls.filter(l=>state.sc[l.k]).length; const open=state.lgOpen? state.lgOpen[g] : (g==='Revenue'||n>0);
+    return `<details class="lg" data-lg="${esc(g)}" ${open?'open':''}><summary><span>${g}</span><em>${n? n+' moved':ls.length+' levers'}</em></summary>${ls.map(l=>`<div class="lever"><div class="lh"><label for="lv-${l.k}">${l.l} <small>now ${levNow(l)}</small></label><span id="lvv-${l.k}" class="${state.sc[l.k]? (Math.sign(state.sc[l.k])===l.fav?'good-t':'bad-t'):''}">${levText(l,state.sc[l.k])}</span></div><input type="range" id="lv-${l.k}" data-lv="${l.k}" min="${l.min}" max="${l.max}" step="${l.step}" value="${state.sc[l.k]}"></div>`).join('')}</details>`; }).join('');
+  const dP=X.pat-B.pat;
+  return `<div class="rp-top"><div class="ph" style="margin:0"><h2>Scenarios</h2><p>${esc(P.long)}. Each lever below is one of the starting points of the value tree (${LEVERS.length} in all). Move any of them to see how profit and debt would have changed over the period. Reported figures stay as reported; the effects are Aistra estimates.</p></div><button class="btn pri" id="scNew">New scenario</button></div>
+   <div class="presets">${lib}</div>
+   <div class="sc-grid"><div class="box"><div class="box-h"><div><h3>Levers</h3><div class="sub">${moved? moved+' moved':'Grouped as in the tree'}</div></div><button class="btn" id="scReset">Clear</button></div>${groups}
+    <div class="savebar" ${canSave?'':'hidden'}><input id="scName" placeholder="Name this scenario" aria-label="Scenario name"><button class="btn pri" id="scSave">Save</button></div></div>
+   <div class="box sc-res"><div class="box-h"><div><h3>${esc(title)}</h3><div class="sub">${sc?'Scenario against actual':'Move a lever or pick a scenario'}</div></div>${sc?'<button class="btn" id="scShow">Show on the tree</button>':''}</div>
+    <div class="res-cards">${card('EBITDA',X.ebitda,B.ebitda,'m',1)}${card('EBITDA margin',X.ebitdaM,B.ebitdaM,'pct',1)}${card('Net profit to AFL',X.pat,B.pat,'m',1)}${card('Net debt at period end',X.netDebt,B.netDebt,'m',-1)}</div>
+    <div class="tw"><table class="t"><thead><tr><th></th><th>Actual</th><th>Scenario</th><th>Change</th></tr></thead><tbody>${rows.map(([id,l])=>{ const m=N[id]; const a=m.v(X), b=m.v(B); const dl=delta(m.u,a,b,m.dir); return `<tr class="click" data-on="${id}"><td>${l}</td><td>${fvt(m.u,b)}</td><td>${fvt(m.u,a)}</td><td><span class="dchip ${dl.cls}">${chip(m.u,dl)||'–'}</span></td></tr>`; }).join('')}</tbody></table></div>
+    ${sc&&Math.abs(dP)>.05?`<div class="read" style="margin-top:12px">EBITDA ${X.ebitda>=B.ebitda?'rises':'falls'} by ${am(Math.abs(X.ebitda-B.ebitda))} over ${esc(perName(P))}, net profit by ${am(Math.abs(dP))}, and net debt ${X.netDebt<=B.netDebt?'falls':'rises'} by ${am(Math.abs(X.netDebt-B.netDebt))}.</div>`:''}</div></div>`; }
+function scDesc(o){ return LEVERS.filter(l=>o[l.k]).map(l=>`${l.l} ${levText(l,o[l.k])}`).join('; ')||'No levers moved'; }
+function bindSc(){ const p=$('#page');
+  p.querySelectorAll('[data-ps]').forEach(b=>{ b.onclick=e=>{ if(e.target.dataset.delsc) return; const k=b.dataset.ps; const pr=PRESETS.find(x=>x.k===k)||STORE.scen.find(x=>x.id===k); state.sc={...ZERO_SC(),...pr.sc}; state.preset=k; state.lgOpen=null; renderPage(); }; b.onkeydown=e=>{ if(e.key==='Enter') b.click(); }; });
+  p.querySelectorAll('[data-delsc]').forEach(b=>b.onclick=e=>{ e.stopPropagation(); STORE.scen=STORE.scen.filter(s=>s.id!==b.dataset.delsc); saveStore(); if(state.preset===b.dataset.delsc){ state.preset=null; state.sc=ZERO_SC(); } renderPage(); });
+  p.querySelectorAll('details.lg').forEach(d=>d.ontoggle=()=>{ state.lgOpen=state.lgOpen||Object.fromEntries([...p.querySelectorAll('details.lg')].map(x=>[x.dataset.lg,x.open])); state.lgOpen[d.dataset.lg]=d.open; });
+  p.querySelectorAll('[data-lv]').forEach(inp=>{ const l=LEVERS.find(x=>x.k===inp.dataset.lv); inp.oninput=()=>{ state.sc[l.k]=+inp.value; state.preset=null; const el=$('#lvv-'+l.k); el.textContent=levText(l,+inp.value); };
+    inp.onchange=()=>{ state.lgOpen=Object.fromEntries([...p.querySelectorAll('details.lg')].map(x=>[x.dataset.lg,x.open])); const y=window.scrollY; renderPage(); window.scrollTo(0,y); }; });
+  const r=$('#scReset'); if(r) r.onclick=()=>{ state.sc=ZERO_SC(); state.preset=null; state.lgOpen=null; renderPage(); };
+  const n=$('#scNew'); if(n) n.onclick=()=>{ state.sc=ZERO_SC(); state.preset=null; state.lgOpen=null; renderPage(); };
+  const sv=$('#scSave'); if(sv) sv.onclick=()=>{ const name=($('#scName').value||'').trim()||`Scenario ${STORE.scen.length+1}`; const id='s'+Date.now(); STORE.scen.push({id,name,sc:Object.fromEntries(Object.entries(state.sc).filter(([k,v])=>v)),date:today()}); saveStore(); state.preset=id; renderPage(); };
+  const s=$('#scShow'); if(s) s.onclick=()=>{ state.treeSc=scObj(); const pr=PRESETS.find(x=>x.k===state.preset)||STORE.scen.find(x=>x.id===state.preset); state.presetName=pr?(pr.l||pr.name):'New scenario'; state.L=EMPTY_L(); state.view='tree'; state.tab='pat'; renderAll(); window.scrollTo(0,0); };
+  p.querySelectorAll('[data-on]').forEach(tr=>tr.onclick=()=>openNode(tr.dataset.on)); }
+
+// ---------- reports ----------
+const REPORTS=[
+ {id:'R01',l:'CEO one-pager',d:'Revenue, EBITDA, cash and the biggest reasons for the period',to:'Global CEO, India CEO',when:'Monthly, working day 4',freq:'Monthly',st:'rev',r:'ceo'},
+ {id:'R02',l:'Profit and loss',d:'Every line from revenue to net profit, against plan and last year',to:'CFO',when:'Monthly, working day 4',freq:'Monthly',st:'draft',r:'pl'},
+ {id:'R03',l:'Brand and channel',d:'Revenue, EBITDA and margin for every category in every channel',to:'Business directors',when:'Monthly, working day 4',freq:'Monthly',st:'draft',r:'stream'},
+ {id:'R04',l:'Gap to plan',d:'What explains the difference from plan, step by step',to:'CEO, CFO',when:'Monthly, working day 4',freq:'Monthly',st:'rev',r:'bridge'},
+ {id:'R05',l:'Discounts and commissions',d:'Value at list price, revenue, discounts and commissions by brand and channel',to:'Merchandising and channel heads',when:'Weekly, Monday',freq:'Weekly',st:'sent',r:'bill'},
+ {id:'R06',l:'Buying and stock',d:'Share of stock sold, pieces per worker and cost to buy each piece',to:'Sourcing, merchandising',when:'Weekly, Monday',freq:'Weekly',st:'sent',r:'lab'},
+ {id:'R07',l:'People and stores',d:'Employees, cost per employee, stores and days to get paid',to:'HR, retail operations, CFO',when:'Monthly, working day 6',freq:'Monthly',st:'rev',r:'bo'},
+ {id:'R08',l:'Cash and working capital',d:'Cash from trading, lease rent, working capital and net debt',to:'CFO, Treasury',when:'Quarterly',freq:'Quarterly',st:'draft',r:'cash'}];
+const RST={rev:['In review','rev'],draft:['Draft',''],sent:['Sent','closed']};
+const RP_METRICS=['rev','samples','price','real','util','prod','supProd','labStaff','supStaff','cons','consPS','site','sites','segEbitda','segMargin','ebitda','pat','cfo','capBase','dso','netDebt'];
+const CUTS={company:'Whole company',st:'By category',reg:'By channel',div:'By division'};
+function allReports(){ return REPORTS.concat(STORE.reports); }
+function viewRp(){ const f=state.rpFilter; const all=allReports(); const list=all.filter(r=>f==='all'||r.freq===f||(f==='mine'&&r.custom)); const nm=perName(P0());
+  return `<div class="rp-top"><div class="ph" style="margin:0"><h2>Reports</h2><p>${esc(nm)} pack. All reports read from the same tree.</p></div><button class="btn pri" id="rpNew">New report</button></div>
+   <div class="rp-top"><div><b>${all.length} reports</b></div><div class="pill-f">${['all','Monthly','Weekly','Half-yearly','mine'].map(k=>`<button data-rf="${k}" class="${f===k?'on':''}">${k==='all'?'All':k==='mine'?'Added by you':k}</button>`).join('')}</div></div>
+   <div class="rp-list"><div class="rp-head"><span>No.</span><span>Report</span><span>Goes to</span><span>When</span><span>This period</span></div>${list.map(r=>{ const nc=(STORE.comments[r.id+'|'+state.per]||[]).length; return `<button class="rp" data-rp="${r.id}"><span class="id">${r.id}</span><div><b>${esc(r.l)}</b><span>${esc(r.d)}${nc?`. ${nc} comment${nc>1?'s':''}`:''}</span></div><span style="color:var(--ink)">${esc(r.to)}</span><span>${esc(r.when)}</span><span><span class="tag ${RST[r.st][1]}">${RST[r.st][0]}</span></span></button>`; }).join('')||'<div class="empty">No reports here yet.</div>'}</div>`; }
+function newReportForm(){ const opts=RP_METRICS.map(id=>`<label class="ck"><input type="checkbox" value="${id}" ${['rev','segEbit','real','prod'].includes(id)?'checked':''}> ${esc(N[id].l)} <small>${N[id].g==='co'?'Group':''}</small></label>`).join('');
+  $('#sheet').innerHTML=`<button class="x" id="mClose" aria-label="Close">×</button><h3>New report</h3><div class="sub">Pick the numbers and how to cut them. It reads from the tree every period.</div>
+   <div class="form"><label>Name<input id="nrName" placeholder="For example: Environmental Americas monthly"></label><label>Goes to<input id="nrTo" placeholder="For example: EGM Environmental"></label>
+   <label>How often<select id="nrFreq"><option>Monthly</option><option>Weekly</option><option>Half-yearly</option></select></label><label>Cut<select id="nrCut">${Object.entries(CUTS).map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select></label></div>
+   <div class="h4">Numbers</div><div class="cks">${opts}</div><div class="deck-note">Group-level numbers show only when the cut is Whole Group.</div>
+   <div style="margin-top:16px;display:flex;gap:8px"><button class="btn pri" id="nrSave">Save report</button><button class="btn" id="nrCancel">Cancel</button></div>`;
+  $('#modal').classList.add('on'); const close=()=>$('#modal').classList.remove('on'); $('#mClose').onclick=close; $('#nrCancel').onclick=close;
+  $('#nrSave').onclick=()=>{ const ms=[...$('#sheet').querySelectorAll('.cks input:checked')].map(i=>i.value); if(!ms.length) return;
+    const cut=$('#nrCut').value; const freq=$('#nrFreq').value; const n=STORE.reports.length+1;
+    STORE.reports.push({id:'U'+String(n).padStart(2,'0'),l:($('#nrName').value||'').trim()||`Report U${n}`,d:`${CUTS[cut]}: ${ms.map(m=>N[m].l).join(', ')}`,to:($('#nrTo').value||'').trim()||'Not set',when:freq==='Weekly'?'Weekly, Monday':freq==='Half-yearly'?'Half-yearly':'Monthly, working day 4',freq,st:'draft',custom:true,cut,ms});
+    saveStore(); close(); renderPage(); }; }
+function tableHTML(head,rows,total){ return `<div class="tw"><table class="t"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}${total?`<tr class="total">${total.map(c=>`<td>${c}</td>`).join('')}</tr>`:''}</tbody></table></div>`; }
+function customBody(r){ const P=P0(); const ms=r.ms;
+  if(r.cut==='company'){ const S=vals({},P,'actual'), B=vals({},P,'budget'), LY=vals({},shiftP(P,12),'actual');
+    return tableHTML(['','Actual','Plan','vs plan','Last year'],ms.map(id=>{ const m=N[id]; const dl=delta(m.u,m.v(S),B?m.v(B):null,m.dir); return [m.l,fvt(m.u,m.v(S)),B?fvt(m.u,m.v(B)):'–',`<span class="dchip ${dl.cls}">${chip(m.u,dl)||'–'}</span>`,LY?fvt(m.u,m.v(LY)):'–']; })); }
+  const ok=ms.filter(id=>N[id].g==='row');
+  const vs= r.cut==='st'? STREAMS.map(s=>[s.l,{st:s.k,div:s.d}]) : r.cut==='reg'? REGIONS.map(x=>[RG_S[x.k],{reg:x.k}]) : DIVS.map(d=>[d.l,{div:d.k}]);
+  const rows=vs.map(([l,L])=>{ const a=vals({...EMPTY_L(),...L},P,'actual'), b=vals({...EMPTY_L(),...L},P,'budget'); if(!a) return null;
+    return [l,...ok.map(id=>{ const m=N[id]; const dl=delta(m.u,m.v(a),b?m.v(b):null,m.dir); return `${fvt(m.u,m.v(a))} <span class="dchip ${dl.cls}">${chip(m.u,dl)||'–'}</span>`; })]; }).filter(Boolean);
+  return tableHTML([CUTS[r.cut].replace('By ',''),...ok.map(id=>N[id].l)],rows)+(ok.length<ms.length?`<div class="deck-note">Group-level numbers are left out of a ${CUTS[r.cut].toLowerCase()} cut.</div>`:'')+`<div class="deck-note">Change shown against plan.</div>`; }
+function commentsHTML(r){ const key=r.id+'|'+state.per; const list=STORE.comments[key]||[];
+  return `<div class="comments"><h4>Commentary, ${esc(perName(P0()))}</h4>${list.map((c,i)=>`<div class="cmt"><div class="cmt-h"><b>${esc(c.who||'Unnamed')}</b><span>${esc(c.date)}</span><button class="del" data-delc="${i}">Delete</button></div><p>${esc(c.text).replace(/\n/g,'<br>')}</p></div>`).join('')||'<p class="deck-note" style="margin:0 0 10px">No commentary yet.</p>'}
+   <div class="cmt-form"><input id="cWho" placeholder="Your name and role"><textarea id="cText" rows="3" placeholder="What explains this period’s numbers"></textarea><button class="btn pri" id="cAdd">Add comment</button></div></div>`; }
+function renderReport(r){ const P=P0(), S=vals({},P,'actual'), B=vals({},P,'budget'), LY=vals({},shiftP(P,12),'actual'); let body='';
+  const d=(u,a,b,dir)=>{ const x=delta(u,a,b,dir); return `<span class="dchip ${x.cls}">${chip(u,x)||'–'}</span>`; };
+  const RV=ROWS.map(rw=>({rw,a:vals({div:null,st:rw.st,reg:rw.reg},P,'actual'),b:vals({div:null,st:rw.st,reg:rw.reg},P,'budget')}));
+  const note='<div class="deck-note">Company totals: AFL’s reported results. Brand, channel and month splits are estimates until AFL’s data is connected.</div>';
+  if(r.r==='ceo'){ const br=bridge({},P,'budget'); body=`<div class="mini-kpis"><div><span>Revenue</span><b>${am(S.rev)}</b></div><div><span>EBITDA margin</span><b>${num(S.ebitdaM*100,1)}%</b></div><div><span>Gross margin</span><b>${num(S.grossM*100,1)}%</b></div><div><span>Net debt</span><b>${am(S.netDebt)}</b></div></div><p>${bridgeSummary(br,'the illustrative plan')}</p>`+note; }
+  else if(r.r==='pl'){ const ids=['rev','cons','comm','labStaff','supStaff','site','segEbitda','corp','ebitda','da','fin','pbt','tax','nci','pat'];
+    body=tableHTML(['₹ Cr','Actual','Plan','Last year'],ids.map(id=>{ const m=N[id]; return [m.l,num(m.v(S),0),B?num(m.v(B),0):'–',LY?num(m.v(LY),0):'–']; }))+note; }
+  else if(r.r==='stream'){ body=tableHTML(['Brand and channel','Revenue, ₹ Cr','EBITDA, ₹ Cr','Margin'],RV.map(x=>[ROW_L[x.rw.id],num(x.a.rev,0),num(x.a.segEbitda,0),num(x.a.segEbitdaM*100,1)+'%']),['Total',num(S.rev,0),num(S.segEbitda,0),num(S.segEbitdaM*100,1)+'%'])+note; }
+  else if(r.r==='bridge'){ const br=bridge({},P,'budget'); body=tableHTML(['Step','Effect, ₹ Cr'],br.steps.map(x=>[x.l,`${x.v>=0?'+':MINUS}${num(Math.abs(x.v),0)}`]),['Plan to actual',`${br.a-br.b>=0?'+':MINUS}${num(Math.abs(br.a-br.b),0)}`])+note; }
+  else if(r.r==='bill'){ body=tableHTML(['Brand and channel','At list price, ₹ Cr','Revenue, ₹ Cr','Realisation','Commission'],RV.slice().sort((x,y)=>y.a.comm-x.a.comm).map(x=>[ROW_L[x.rw.id],num(x.a.owed,0),num(x.a.rev,0),num(x.a.real*100,1)+'%',num(x.a.commRate*100,1)+'%']))+note; }
+  else if(r.r==='lab'){ body=tableHTML(['Brand and channel','Sell-through','Pieces per service person a month','Cost to buy each piece'],RV.map(x=>[ROW_L[x.rw.id],num(x.a.util*100,1)+'%',num(x.a.prod,0),ad(x.a.consPS,0)]))+note; }
+  else if(r.r==='bo'){ body=tableHTML(['Brand and channel','Employees','Cost, ₹ Cr','Stores'],RV.map(x=>[ROW_L[x.rw.id],num(x.a.supHc,0),num(x.a.sup,0),num(x.a.sites,0)]))+`<p style="margin-top:12px">Days to get paid: <b>${num(S.dso,0)}</b> at the end of ${esc(perName(P))}.</p>`+note; }
+  else if(r.r==='cash'){ const ids=['ebitda','leases','wcChg','fcfg','capBase','intTax','other','ndRed','netDebt','dso','dpo'];
+    body=tableHTML(['','Actual','Plan','Last year'],ids.map(id=>{ const m=N[id]; return [m.l,fvt(m.u,m.v(S)),B?fvt(m.u,m.v(B)):'–',LY?fvt(m.u,m.v(LY)):'–']; }))+note; }
+  if(r.custom) body=customBody(r);
+  $('#sheet').innerHTML=`<button class="x" id="mClose" aria-label="Close">×</button><div style="color:var(--mute);font-weight:600">${r.id}</div><h3>${esc(r.l)}</h3><div class="sub">${esc(perName(P))}. Goes to ${esc(r.to)}. ${esc(r.when)}.${r.custom?' <button class="del" id="rpDel">Delete report</button>':''}</div>${body}${commentsHTML(r)}`;
+  $('#modal').classList.add('on'); $('#mClose').onclick=()=>$('#modal').classList.remove('on');
+  const key=r.id+'|'+state.per;
+  $('#cAdd').onclick=()=>{ const text=($('#cText').value||'').trim(); if(!text) return; (STORE.comments[key]=STORE.comments[key]||[]).push({who:($('#cWho').value||'').trim(),text,date:today()}); saveStore(); renderReport(r); renderPage(); };
+  $('#sheet').querySelectorAll('[data-delc]').forEach(b=>b.onclick=()=>{ STORE.comments[key].splice(+b.dataset.delc,1); saveStore(); renderReport(r); renderPage(); });
+  const rd=$('#rpDel'); if(rd) rd.onclick=()=>{ STORE.reports=STORE.reports.filter(x=>x.id!==r.id); saveStore(); $('#modal').classList.remove('on'); renderPage(); }; }
+function bindRp(){ const p=$('#page'); p.querySelectorAll('[data-rf]').forEach(b=>b.onclick=()=>{ state.rpFilter=b.dataset.rf; renderPage(); });
+  p.querySelectorAll('[data-rp]').forEach(b=>b.onclick=()=>renderReport(allReports().find(r=>r.id===b.dataset.rp)));
+  $('#rpNew').onclick=newReportForm; }
+
+// ---------- ask ----------
+const QUESTIONS=['Where do commissions cost most?','How did H1 FY27 compare with H1 FY26?','How is Tommy Hilfiger doing online?','What does product cost per piece?','Where did the cash go?','Which numbers here are reported?'];
+const rchip=(id,l)=>`<span class="ref-chip" data-on="${id}">${esc(l||N[id].l)}</span>`;
+function findStream(ql){ return STREAMS.find(s=>ql.includes(s.l.toLowerCase())||(s.k==='uspa'&&/uspa|polo/.test(ql))||(s.k==='th'&&/tommy/.test(ql))||(s.k==='ck'&&/calvin|\bck\b/.test(ql))||(s.k==='fm'&&/flying/.test(ql))); }
+function findRegion(ql){ if(/retail|store|ebo/.test(ql)&&!/cost per/.test(ql)) return 'rt'; if(/online|e-?commerce|b2c/.test(ql)) return 'ob'; if(/wholesale|mbo|department/.test(ql)) return 'wh'; if(/b2b/.test(ql)) return 'b2b'; return null; }
+const ESTN='<p class="hint">Company totals are AFL’s reported figures; brand and channel numbers are estimates until AFL’s data is connected.</p>';
+function answer(q){ const P=P0(), S=vals({},P,'actual'), LY=vals({},shiftP(P,12),'actual'), pn=perName(P); const ql=q.toLowerCase();
+  if(/reported|real|accurate|source/.test(ql)) return `<p>Reported: revenue, product cost, employee cost, other expenses, EBITDA, depreciation, finance cost, tax and partners’ share for H1 FY26, FY26 and H1 FY27; FY26 other expenses by type; channel mix, stores and working capital days. Estimated: splits by brand, channel and month, pieces, prices and headcount by role.</p>`;
+  if(/commission/.test(ql)){ const rows=ROWS.map(r=>({r,a:vals({div:null,st:r.st,reg:r.reg},P,'actual')})).sort((x,y)=>y.a.comm-x.a.comm).slice(0,3);
+    return `<p>${rchip('comm')} were ${am(S.comm)} in ${pn}, ${num(S.commRate*100,1)}% of revenue. Largest: ${rows.map(x=>`${ROW_L[x.r.id]} ${am(x.a.comm)}`).join(', ')}.</p>`+ESTN; }
+  const st=findStream(ql), rg=findRegion(ql);
+  if(st||rg){ const L={...EMPTY_L(),st:st?st.k:null,reg:rg,div:st?st.d:null}; const a=vals(L,P,'actual'); const nm=[st?st.l:null,rg?RG_L[rg]:null].filter(Boolean).join(', ');
+    return `<p><b>${esc(nm)}</b> in ${pn}: ${rchip('rev')} ${am(a.rev)}, ${rchip('segEbitda')} ${am(a.segEbitda)} (${num(a.segEbitdaM*100,1)}%). ${rchip('real')} ${num(a.real*100,1)}%; ${rchip('commRate')} ${num(a.commRate*100,1)}%.</p>`+ESTN; }
+  if(/product|landed|cost per piece|sourcing/.test(ql)) return `<p>${rchip('cons')} was ${am(S.cons)} in ${pn}, ${num((1-S.grossM)*100,1)}% of revenue (gross margin ${num(S.grossM*100,1)}%). Each 1% off buying cost is worth about ${am(S.cons*.01)}.</p>`;
+  if(/cash|debt/.test(ql)) return `<p>${rchip('fcfg')} was ${am(S.fcfg)} in ${pn} after ${rchip('leases')} of ${am(S.leases)} and ${rchip('wcChg','working capital')} of ${am(S.wcChg)}. ${rchip('netDebt')} ended at ${am(S.netDebt)}.</p>`;
+  if(LY) return `<p>${rchip('rev')} ${am(S.rev)} vs ${am(LY.rev)} (+${num((S.rev/LY.rev-1)*100,1)}%). ${rchip('ebitda')} ${am(S.ebitda)} vs ${am(LY.ebitda)}; margin ${num(S.ebitdaM*100,1)}% vs ${num(LY.ebitdaM*100,1)}%; gross margin ${num(S.grossM*100,1)}% vs ${num(LY.grossM*100,1)}%.</p>`;
+  return `<p>I can answer questions on revenue, discounts, product cost, commissions, stores, people, cash and the reported figures, for AFL or any brand and channel.</p>`; }
+function trendBlock(id,L,label){ L=L||{}; const m=N[id]; const e=P0().e; const t0=Math.max(0,e-5); const xs=[],a=[];
+  for(let i=t0;i<=e;i++){ const A=vals({...EMPTY_L(),...L},{s:i,e:i},'actual'); xs.push(MONTHS[i].short); a.push(A?m.v(A):null); }
+  return `<div class="trend"><div class="trend-h">${esc(label||m.l)}, last six months (monthly split estimated)</div><div class="tw"><table class="t"><thead><tr><th></th>${xs.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody><tr><td>Estimate</td>${a.map(v=>`<td><b>${fvt(m.u,v)}</b></td>`).join('')}</tr></tbody></table></div></div>`; }
+function trendFor(q){ const ql=q.toLowerCase(); if(/reported|cash|debt/.test(ql)) return ''; if(/commission/.test(ql)) return trendBlock('commRate'); if(/product|landed/.test(ql)) return trendBlock('consPS'); return trendBlock('rev'); }
+function viewAsk(){ const pn=perName(P0());
+  return `<div class="ask"><div class="ph"><h2>Ask</h2><p>Answers are built from the value tree for ${esc(pn)}. Underlined numbers open the box they come from.</p></div>
+   ${state.convo.length?'':`<div class="qs">${QUESTIONS.map(q=>`<button data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>`}
+   <div class="convo">${state.convo.map(c=>`<div class="q-b">${esc(c.q)}</div><div class="a-b">${c.a}</div>`).join('')}</div>
+   ${state.convo.length?`<div class="qs" style="margin-top:0">${QUESTIONS.filter(q=>!state.convo.find(c=>c.q===q)).slice(0,3).map(q=>`<button data-q="${esc(q)}">${esc(q)}</button>`).join('')}</div>`:''}
+   <form class="ask-bar" id="askF"><input id="askI" placeholder="Ask about the numbers, for example: how is Arrow doing in wholesale?" aria-label="Question"><button class="btn pri" type="submit">Ask</button></form></div>`; }
+function bindAsk(){ const p=$('#page'); const go=q=>{ if(!q.trim()) return; state.convo.push({q,a:answer(q)+trendFor(q)}); renderPage(); const c=p.querySelectorAll('.a-b'); if(c.length) c[c.length-1].scrollIntoView({block:'center'}); };
+  p.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>go(b.dataset.q)); $('#askF').onsubmit=e=>{ e.preventDefault(); go($('#askI').value); };
+  p.querySelectorAll('[data-on]').forEach(c=>c.onclick=()=>{ state.L=EMPTY_L(); openNode(c.dataset.on); }); }
+
+// ---------- alerts page ----------
+const RULES=[['A1','Share of tag price kept below 62%','Realisation, by brand and channel','Below 62% in the period','Merchandising','CEO'],['A2','Commission above 20% of revenue','Commission rate, by brand and channel','Above 20% in the period','Channel heads','CFO'],['A3','Cost to buy each piece up more than 6%','Cost to buy each piece, by brand and channel','More than 6% above a year earlier','Sourcing','COO'],['A4','EBITDA margin below plan','EBITDA margin','More than 0.3 points below plan','CFO','CEO'],['A5','Net debt above March level','Net debt','Above the last year-end','CFO','Board']];
+function viewAl(){ const all=alertsFor(); const f=state.alertFilter; const list=all.filter(a=>f==='all'||a.status===f);
+  const cnt=k=>all.filter(a=>a.status===k).length; if(!state.alertSel||!all.find(a=>a.id===state.alertSel)) state.alertSel=all[0]&&all[0].id; const sel=all.find(a=>a.id===state.alertSel);
+  let h=`<div class="al-top"><div class="ph"><h2>Alerts</h2><p>${esc(perName(P0()))}, against the illustrative plan and last year. Rules are checked every time the numbers change. Brand and channel figures are illustrative.</p></div><div class="counts"><div><b class="bad-t">${cnt('open')}</b><span>Open</span></div><div><b>${cnt('ack')}</b><span>Acknowledged</span></div><div><b class="good-t">${cnt('closed')}</b><span>Closed</span></div></div></div>
+   <div class="subtabs"><button data-at="feed" class="${state.alertTab==='feed'?'on':''}">This period</button><button data-at="rules" class="${state.alertTab==='rules'?'on':''}">Rules</button></div>`;
+  if(state.alertTab==='rules'){ const mopts=['real','util','prod','price','rev','segEbit','segMargin','staff','supStaff','ebit','pat','dso','lev','netDebt'];
+    const custom=STORE.alerts.map(c=>{ const m=N[c.m]; return [`<b>${c.id}</b> ${esc(c.name)}`,`${esc(m.l)}, ${c.scope==='company'?'whole Group':'each brand and channel'}`,`${c.cond==='below'?'Below':'Above'} ${fvs(m.u,m.u==='pct'?c.val/100:c.val)}`,esc(c.owner||'Not set'),`<button class="del" data-dela="${c.id}">Delete</button>`]; });
+    return h+`<div class="box"><div class="box-h"><h3>Rules</h3><button class="btn pri" id="alNew">New rule</button></div>
+     <div class="form" id="alForm" hidden><label>Name<input id="naName" placeholder="For example: Utilisation under 78%"></label><label>Number<select id="naM">${mopts.map(id=>`<option value="${id}">${esc(N[id].l)}</option>`).join('')}</select></label>
+      <label>Check<select id="naScope"><option value="row">Each brand and channel</option><option value="company">Whole Group</option></select></label><label>Flag when<select id="naCond"><option value="below">Falls below</option><option value="above">Rises above</option></select></label>
+      <label>Limit <span id="naUnit" style="color:var(--mute)"></span><input id="naVal" type="number" step="any" placeholder="78"></label><label>Owner<input id="naOwner" placeholder="For example: Lab managers"></label>
+      <div style="display:flex;gap:8px;align-items:end"><button class="btn pri" id="naSave">Save rule</button><button class="btn" id="naCancel">Cancel</button></div></div>
+     ${tableHTML(['Rule','Looks at','Flags when','Owner','Who hears'],RULES.map(r=>[`<b>${r[0]}</b> ${r[1]}`,r[2],r[3],r[4],r[5]]).concat(custom))}</div>`; }
+  h+=`<div class="pill-f">${[['all','All'],['open','Open'],['ack','Acknowledged'],['closed','Closed']].map(([k,l])=>`<button data-af="${k}" class="${f===k?'on':''}">${l}</button>`).join('')}</div>
+   <div class="al-grid"><div class="al-list">${list.map(a=>`<div class="al-card ${a.id===state.alertSel?'on':''}" data-as="${a.id}" tabindex="0" role="button"><span class="dot ${a.status==='ack'?'amber':a.status==='closed'?'grey':''}"></span><div><div class="rule"><span class="tag">${a.id}</span>${esc(a.rule)}</div><div class="tt">${esc(a.title)}</div><div class="tags"><span style="color:var(--mute)">${esc(a.owner)}</span>${stTag(a)}</div></div>${impHTML(a)}</div>`).join('')||'<div class="empty">No alerts in this group.</div>'}</div>`;
+  if(sel) h+=`<div class="al-detail"><div class="tags"><span class="tag">${sel.id}</span><b>${esc(sel.rule)}</b></div><h3>${esc(sel.title)}</h3><div class="tags">${stTag(sel)}<span style="color:var(--mute)">Owner: ${esc(sel.owner)}</span></div>
+    <div class="sec">What happened</div><div>${esc(sel.what)}</div><div class="sec">Where it shows in the tree</div><div class="hint" style="margin-top:0">Largest first. Click one to open that box.</div>${sel.why.map((w,i)=>`<div class="why-li" data-wi="${i}" role="button" tabindex="0"><div><b>${esc(w.l)}</b><span>${esc(w.dt)}</span></div><span class="chev">›</span></div>`).join('')}
+    <div class="sec">Impact</div><div class="sowhat">${esc(sel.so)}</div></div>`;
+  return h+`</div>`; }
+function bindAl(){ const p=$('#page');
+  const unit=()=>{ const m=N[$('#naM').value]; $('#naUnit').textContent= m.u==='pct'?'(%)':m.u==='m'?'(₹ Cr)':m.u==='aud'?'(A$)':m.u==='days'?'(days)':m.u==='x'?'(times)':''; const co=m.g==='co'; const sc=$('#naScope'); sc.querySelector('[value=row]').disabled=co; if(co) sc.value='company'; };
+  const nb=$('#alNew'); if(nb) nb.onclick=()=>{ $('#alForm').hidden=false; unit(); $('#naName').focus(); };
+  const nm=$('#naM'); if(nm) nm.onchange=unit;
+  const cc=$('#naCancel'); if(cc) cc.onclick=()=>{ $('#alForm').hidden=true; };
+  const ns=$('#naSave'); if(ns) ns.onclick=()=>{ const val=parseFloat($('#naVal').value); if(!isFinite(val)){ $('#naVal').focus(); return; } const n=STORE.alerts.length+1; const m=$('#naM').value;
+    STORE.alerts.push({id:'U'+n,name:($('#naName').value||'').trim()||`${N[m].l} rule`,m,scope:$('#naScope').value,cond:$('#naCond').value,val,owner:($('#naOwner').value||'').trim()}); saveStore(); renderAll(); };
+  p.querySelectorAll('[data-dela]').forEach(b=>b.onclick=()=>{ STORE.alerts=STORE.alerts.filter(a=>a.id!==b.dataset.dela); saveStore(); renderAll(); });
+  p.querySelectorAll('[data-at]').forEach(b=>b.onclick=()=>{ state.alertTab=b.dataset.at; renderPage(); });
+  p.querySelectorAll('[data-af]').forEach(b=>b.onclick=()=>{ state.alertFilter=b.dataset.af; renderPage(); });
+  p.querySelectorAll('[data-as]').forEach(b=>{ b.onclick=()=>{ state.alertSel=b.dataset.as; renderPage(); }; b.onkeydown=e=>{ if(e.key==='Enter') b.click(); }; });
+  const sel=alertsFor().find(a=>a.id===state.alertSel);
+  p.querySelectorAll('[data-wi]').forEach(b=>{ b.onclick=()=>{ const w=sel.why[+b.dataset.wi]; state.L= w.lens? {div:STREAM_BY[w.lens.st].d,st:w.lens.st,reg:w.lens.reg} : EMPTY_L(); state.view='tree'; renderAll(); openNode(w.node); }; b.onkeydown=e=>{ if(e.key==='Enter') b.click(); }; }); }
+
+// ---------- overview ----------
+function walkHTML(S){ const steps=[['Revenue','reported',S.rev,'tot'],['Product cost','reported',-S.cons],['Channel commissions','FY26 note shares',-S.comm],['Store and logistics services','FY26 note shares',-S.lab],['Employees','reported',-S.sup],['Stores and overheads','FY26 note shares',-S.site],['Brand EBITDA','',S.segEbitda,'tot'],['Royalty and ad spend','FY26 note shares',-S.corp],['EBITDA',`${num(S.ebitdaM*100,1)}% of revenue, reported`,S.ebitda,'tot'],['Depreciation','reported',-S.daAll],['Interest','net of income earned',-S.fin],['Tax','reported',-S.tax],['Partners’ share','reported',-S.nci],['Net profit to AFL','continuing operations',S.pat,'tot']];
+  const max=S.rev*1.02; const X=v=>v/max*100; let run=0; let out='';
+  for(const [l,sub,v,tot] of steps){ let left,width,col;
+    if(tot){ left=0; width=Math.abs(v); run=v; col='var(--tot)'; } else { const a=run,b=run+v; left=Math.min(a,b); width=Math.abs(v); run=b; col=v<0?'var(--bad)':'var(--good)'; }
+    out+=`<div class="wl ${tot?'tot':''}">${l}<small>${sub}</small></div><div class="wb"><div style="left:${Math.max(0,X(left))}%;width:${Math.max(.4,X(width))}%;background:${col}"></div></div><div class="wv ${v<0&&!tot?'bad-t':''}">${am(v)}</div>`; }
+  return `<div class="walk">${out}</div>`; }
+function viewOv(){ const P=PER_BY.H1FY27, Y={s:6,e:11}; const S=vals({},P,'actual'), LY=vals({},Y,'actual');
+  let h=`<section class="hero"><div class="when">H1 FY27, April to September 2026, against H1 FY26</div>
+   <h2>Arvind Fashions turned ${am(S.rev)} of revenue into ${am(S.ebitda)} of EBITDA, a ${num(S.ebitdaM*100,1)}% margin, with gross margin up to ${num(S.grossM*100,1)}%.</h2>
+   <p>Revenue grew ${num((S.rev/LY.rev-1)*100,1)}%. Channel commissions took ${num(S.commRate*100,1)}% of revenue, more than employees and stores combined. Net debt rose to ${am(S.netDebt)} as working capital grew.</p>
+   <div class="hero-stats"><div><b>${am(S.rev)}</b><span>revenue, up ${num((S.rev/LY.rev-1)*100,1)}%</span></div><div><b>${am(S.ebitda)}</b><span>EBITDA excl. other income</span></div><div><b>${am(S.comm)}</b><span>channel commissions</span></div><div><b>${am(S.netDebt)}</b><span>net debt, September 2026</span></div></div>
+   <p class="byline">Company totals are AFL’s reported results (Q2 FY27 fact sheet, annual report 2026). The split of other expenses uses FY26 note shares; brand, channel and month splits, pieces and prices are our estimates.</p></section>`;
+  h+=`<section class="ov-sec"><div><h3>How revenue is built</h3><p class="side-note">Revenue is reported; the three drivers are our estimates.</p></div><div>
+   <div class="eq"><button class="t" data-tree="samples"><b>${num(S.samplesK/1e3,1)}M</b><span>pieces sold</span></button><span class="o">×</span><button class="t" data-tree="price"><b>${ad(S.price,0)}</b><span>list price per piece</span></button><span class="o">×</span><button class="t" data-tree="real"><b>${num(S.real*100,1)}%</b><span>share of tag price kept</span></button><span class="o">=</span><button class="t tot" data-tree="rev"><b>${am(S.rev)}</b><span>revenue</span></button></div></div></section>`;
+  h+=`<section class="ov-sec"><div><h3>Where each rupee goes</h3><p class="side-note">H1 FY27. Lease rent for long-term stores sits in depreciation and finance cost under Ind AS.</p></div><div>${walkHTML(S)}</div></section>`;
+  const imp=levImpacts(P); const prof=imp.filter(x=>Math.abs(x.dPat)>=0.3).sort((a,b)=>b.dPat-a.dPat).slice(0,9); const cash=imp.filter(x=>x.l.k!=='fxo'&&Math.abs(x.dPat)<0.3&&x.dNd<-0.3).sort((a,b)=>a.dNd-b.dNd).slice(0,4);
+  const row=x=>`<tr class="click" data-tree="${x.l.node}"><td><b>${esc(x.l.l)}</b></td><td>${esc(x.l.move||'')}<div class="lv-what">Today: ${x.l.k==='owc'?'stock worth 108 days of sales':x.l.k==='real'?'about ₹'+num(vals({},P,'actual').real*100,0)+' of every ₹100':(['aud','aud2'].includes(N[x.l.node].u)? ad(N[x.l.node].v(vals({},P,'actual')),0):levNow(x.l))}</div></td><td class="${x.dPat>=0?'good-t':'bad-t'}">${Math.abs(x.dPat)<0.05?'No change':(x.dPat>=0?'+':MINUS)+am(Math.abs(x.dPat),1)}</td><td class="${x.dNd<=0?'good-t':'bad-t'}">${Math.abs(x.dNd)<0.05?'No change':am(Math.abs(x.dNd),1)+(x.dNd<0?' lower':' higher')}</td></tr>`;
+  const head=`<thead><tr><th>Lever</th><th>Change tested</th><th>Net profit</th><th>Net debt</th></tr></thead>`;
+  h+=`<section class="ov-sec"><div><h3>What moves profit and debt</h3><p class="side-note">One change at a time, with everything else as in H1 FY27 (April to September 2026). Aistra estimates.</p></div><div>
+   <div class="tw"><table class="t rank lv-tbl">${head}<tbody>${prof.map(row).join('')}</tbody></table></div>
+   <h4 style="margin:22px 0 8px">Changes that free cash only</h4>
+   <div class="tw"><table class="t rank lv-tbl">${head}<tbody>${cash.map(row).join('')}</tbody></table></div>
+   <p class="para" style="margin-top:10px"><button class="linkb" id="goSc">Try any combination on the Scenarios page</button></p></div></section>`;
+  h+=`<section class="ov-sec"><div><h3>Where Aistra would start</h3><p class="side-note">Aistra estimates on the H1 FY27 base.</p></div><div class="levers3">
+   <div><h4>Pay less in commissions</h4><div class="big">${am(S.comm)}</div><p>of channel commissions in the half, ${num(S.commRate*100,1)}% of revenue.</p><div class="m">Paying 5% less in commissions on the same sales is worth about ${am(S.comm*.05,0)} over the half.</div><p class="lv-links"><button class="linkb" data-more="bill">See more</button><button class="linkb" data-tree="commRate">See in the value tree</button></p></div>
+   <div><h4>Buy for less and discount less</h4><div class="big">${num(S.grossM*100,1)}%</div><p>gross margin on ${am(S.cons)} of product cost.</p><div class="m">Each 1% off the cost of buying is worth about ${am(S.cons*.01,0)} over the half. Keeping ₹1 more of every ₹100 of tag price is worth about ${am(S.owed*.01,0)}.</div><p class="lv-links"><button class="linkb" data-more="lab">See more</button><button class="linkb" data-tree="consPS">See in the value tree</button></p></div>
+   <div><h4>Hold less stock</h4><div class="big">108 days</div><p>of inventory at September 2026, up from 96 a year earlier.</p><div class="m">Holding 10 fewer days of stock frees about ${am(S.rev/(P.e-P.s+1)*12/365*10,0)} of cash.</div><p class="lv-links"><button class="linkb" data-more="bo">See more</button><button class="linkb" data-tree="owc">See in the value tree</button></p></div></div></section>`;
+  return h; }
+function leverPanel(k){ const P=PER_BY.H1FY27; const RV=ROWS.map(r=>({r,a:vals({div:null,st:r.st,reg:r.reg},P,'actual')}));
+  let title,tab,holds,helps,link;
+  if(k==='bill'){ title='Pay less in commissions'; link='commRate'; tab=['Highest commission rates',['Brand and channel','Rate','Commission'],RV.slice().sort((x,y)=>y.a.commRate-x.a.commRate).slice(0,7).map(x=>[ROW_L[x.r.id],num(x.a.commRate*100,1)+'%',am(x.a.comm)])];
+    holds=['The same commission rate is paid whether a partner’s store sells a lot or a little.','Marketplace fees, returns charges and delivery charges tend to rise over time.','Franchise terms are set when a store opens and are rarely revisited.']; helps=['Pay a lower rate as a partner’s sales grow, so strong stores cost less per rupee of sales.','Renegotiate marketplace terms each year, using AFL’s own sales data.','Sell more through AFL’s own stores and website where that costs less than a partner’s cut.']; }
+  else if(k==='lab'){ title='Buy for less and discount less'; link='consPS'; tab=['Cost to buy each piece',['Brand and channel','Per piece','Product cost'],RV.slice().sort((x,y)=>y.a.cons-x.a.cons).slice(0,7).map(x=>[ROW_L[x.r.id],ad(x.a.consPS,0),am(x.a.cons)])];
+    holds=['Many suppliers each get small orders, so AFL pays higher prices.','Clothes are bought months ahead; what does not sell is cleared with discounts.','Duty and freight are not tracked for each piece, so the true cost is unclear.']; helps=['Buy the same fabrics and trims for all five brands to get volume prices.','Work out what each style should cost and use it in supplier talks.','Buy closer to the season and send stock to the stores where it sells.']; }
+  else { title='Hold less stock'; link='owc'; tab=['Revenue by brand and channel',['Brand and channel','Revenue','Share of stock sold'],RV.slice().sort((x,y)=>y.a.rev-x.a.rev).slice(0,7).map(x=>[ROW_L[x.r.id],am(x.a.rev),num(x.a.util*100,0)+'%'])];
+    holds=['Selling more through AFL’s own stores means holding more stock in those stores.','Each season’s clothes are bought months in advance.','Slow-selling styles are kept rather than cleared early.']; helps=['Send stock to each store based on what it actually sells, and refill weekly.','Clear slow styles early, through the channel that sells them best.','Set a stock limit for each brand and store, and check it every week.']; }
+  $('#dTitle').innerHTML=`<h3>${title}</h3><div class="tags"><span class="tag">H1 FY27, estimates</span></div>`;
+  $('#dBody').innerHTML=`<div class="h4" style="margin-top:0">${tab[0]}</div>${tableHTML(tab[1],tab[2])}<div class="h4">What usually holds it</div><ul class="plist">${holds.map(x=>`<li>${x}</li>`).join('')}</ul><div class="h4">What helps</div><ul class="plist">${helps.map(x=>`<li>${x}</li>`).join('')}</ul><p class="deck-note">Brand and channel figures are estimates until AFL’s data is connected; reasons and actions are common industry practice.</p><p class="lv-links"><button class="linkb" data-lp="${link}">See in the value tree</button></p>`;
+  $('#drawer').classList.add('open'); $('#scrim').classList.add('on');
+  $('#dBody').querySelectorAll('[data-lp]').forEach(b=>b.onclick=()=>{ closeDrawer(); goToNode(b.dataset.lp); }); }
+function goToNode(id){ const key=treeOf(id); const def=TREES[key]; const par={}; for(const [k,kids] of Object.entries(def.ch)) for(const [c] of kids) par[c]=k;
+  let x=id; while(par[x]){ x=par[x]; state.collapsed[x]=false; }
+  state.view='tree'; state.tab='pat'; state.per='H1FY27'; state.L=EMPTY_L(); state.sel=id; renderAll();
+  setTimeout(()=>{ const el=document.querySelector(`#ti-${key} .node[data-node="${id}"]`); if(el){ el.classList.add('picked'); el.scrollIntoView({block:'center',inline:'center',behavior:'smooth'}); } },60); }
+function bindOv(){ const p=$('#page'); p.querySelectorAll('[data-tree]').forEach(b=>b.onclick=()=>goToNode(b.dataset.tree)); p.querySelectorAll('[data-more]').forEach(b=>b.onclick=()=>leverPanel(b.dataset.more));
+  const gs=$('#goSc'); if(gs) gs.onclick=()=>{ state.view='sc'; renderAll(); window.scrollTo(0,0); };
+  const g=$('#goTree'); if(g) g.onclick=()=>{ state.view='tree'; state.tab='pat'; state.per='H1FY27'; renderAll(); window.scrollTo(0,0); }; }
+
+// ---------- render ----------
+function renderPage(){ const p=$('#page'); const v=state.view;
+  if(v==='ov'){ p.innerHTML=viewOv(); bindOv(); }
+  else if(v==='tree'){ p.innerHTML=viewTree(); bindTreeView(); }
+  else if(v==='sc'){ p.innerHTML=viewSc(); bindSc(); }
+  else if(v==='rp'){ p.innerHTML=viewRp(); bindRp(); }
+  else if(v==='ask'){ p.innerHTML=viewAsk(); bindAsk(); }
+  else { p.innerHTML=viewAl(); bindAl(); }
+  p.querySelectorAll('.stat[data-node]').forEach(k=>k.onclick=()=>openNode(k.dataset.node)); }
+function renderAll(){ renderNav(); renderFilters(); renderPage(); }
+$('#dClose').onclick=closeDrawer; $('#scrim').onclick=closeDrawer;
+$('#modal').onclick=e=>{ if(e.target.id==='modal') $('#modal').classList.remove('on'); };
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ if(state.full&&!$('#drawer').classList.contains('open')){ state.full=null; document.body.style.overflow=''; renderPage(); } closeDrawer(); $('#modal').classList.remove('on'); } });
+$('#resetBtn').onclick=()=>{ Object.assign(state,{view:'ov',per:'H1FY27',cmp:'ly',L:EMPTY_L(),tab:'pat',collapsed:DEF_COLLAPSE(),zoom:{},treeSc:null,sc:ZERO_SC(),preset:null,convo:[],full:null}); document.body.style.overflow=''; closeDrawer(); renderAll(); };
+let rz; window.addEventListener('resize',()=>{ clearTimeout(rz); rz=setTimeout(()=>{ if(state.view==='tree') TABS[state.tab].trees.forEach(applyZoom); },120); });
+state.sc=ZERO_SC();
+renderAll();
+
+</script>
+</body>
+</html>
